@@ -51,9 +51,9 @@ export default function HeroSection() {
             <div className="absolute -inset-6 rounded-[2rem] bg-[radial-gradient(circle_at_30%_20%,rgba(212,175,55,0.20),transparent_60%)] blur-2xl" />
             <div className="relative overflow-hidden rounded-[1.5rem] border border-gold/15 bg-neutral-950/40">
               <img
-                src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=1600&q=80"
-                alt="Ambiente profissional"
-                className="h-[280px] w-full object-cover opacity-80 md:h-[420px]"
+                src="/assets/atendimento-moderno.jpeg"
+                alt="Atendimento LOHN Advocacia"
+                className="h-[280px] w-full object-cover opacity-90 md:h-[420px]"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

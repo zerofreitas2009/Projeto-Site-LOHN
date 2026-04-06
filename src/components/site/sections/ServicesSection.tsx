@@ -53,11 +53,11 @@ const groups: ServiceGroup[] = [
     ],
   },
   {
-    title: "Direito de Família",
+    title: "Direito de Família e Sucessões",
     icon: Users,
     items: [
       {
-        title: "Divórcio (consensual e litigioso)",
+        title: "Divórcio consensual e litigioso",
         description: "Orientação e condução do procedimento, com foco em solução segura.",
       },
       {
@@ -67,6 +67,18 @@ const groups: ServiceGroup[] = [
       {
         title: "Guarda de menores",
         description: "Guarda, convivência e medidas necessárias para proteção do menor.",
+      },
+      {
+        title: "Inventário",
+        description: "Inventário judicial ou extrajudicial, com organização documental.",
+      },
+      {
+        title: "Partilha de bens",
+        description: "Definição e formalização de partilha em casos familiares e sucessórios.",
+      },
+      {
+        title: "Heranças e sucessões",
+        description: "Orientação em direitos sucessórios e regularização patrimonial.",
       },
     ],
   },
