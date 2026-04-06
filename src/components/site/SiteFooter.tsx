@@ -1,4 +1,5 @@
 import Button from "./ui/Button";
+import ContactEmailForm from "./ContactEmailForm";
 
 const WHATSAPP_NUMBER = "5511913331559";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -48,24 +49,33 @@ export default function SiteFooter() {
           </div>
 
           <div>
-            <div className="text-sm font-semibold text-gold">Ação rápida</div>
+            <div className="text-sm font-semibold text-gold">Enviar e-mail</div>
             <p className="mt-3 text-sm leading-relaxed text-neutral-300">
-              Clique para falar agora pelo WhatsApp.
+              Preencha os dados abaixo para abrir seu app de e-mail com a mensagem pronta.
             </p>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-              <a
-                href={`${WHATSAPP_URL}?text=${encodeURIComponent(
-                  "Olá! Vim pelo site da LOHN Advocacia e gostaria de falar com um advogado."
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex"
-              >
-                <Button>Enviar mensagem</Button>
-              </a>
-              <a href="#top" className="inline-flex">
-                <Button variant="outline">Voltar ao topo</Button>
-              </a>
+
+            <ContactEmailForm />
+
+            <div className="mt-6">
+              <div className="text-sm font-semibold text-gold">Ação rápida</div>
+              <p className="mt-2 text-sm leading-relaxed text-neutral-300">
+                Se preferir, fale agora pelo WhatsApp.
+              </p>
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                    "Olá! Vim pelo site da LOHN Advocacia e gostaria de falar com um advogado."
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex"
+                >
+                  <Button>Enviar mensagem</Button>
+                </a>
+                <a href="#top" className="inline-flex">
+                  <Button variant="outline">Voltar ao topo</Button>
+                </a>
+              </div>
             </div>
           </div>
         </div>
