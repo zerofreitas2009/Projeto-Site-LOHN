@@ -7,23 +7,53 @@ type FormState = {
   name: string;
   phone: string;
   subject: string;
+  message: string;
 };
 
+function formatPhoneBR(input: string) {
+  const digits = input.replace(/\D/g, "").slice(0, 11);
+
+  if (digits.length === 0) return "";
+  if (digits.length < 3) return `(${digits}`;
+
+  const ddd = digits.slice(0, 2);
+  const rest = digits.slice(2);
+
+  // 11 dígitos (celular): (11) 91333-1559
+  if (digits.length > 10) {
+    return `(${ddd}) ${rest.slice(0, 5)}-${rest.slice(5)}`;
+  }
+
+  // 10 dígitos (fixo): (11) 3333-1559
+  if (digits.length > 6) {
+    return `(${ddd}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+  }
+
+  return `(${ddd}) ${rest}`;
+}
+
 export default function ContactEmailForm() {
-  const [form, setForm] = useState<FormState>({ name: "", phone: "", subject: "" });
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
 
   const mailtoHref = useMemo(() => {
-    const subject = `assunto: ${form.subject}`.toLowerCase();
+    const subjectText = (form.subject || "contato").toLowerCase();
+
+    const subject = `assunto: ${subjectText}`;
 
     const body = (
       `nome: ${form.name}\n` +
       `telefone: ${form.phone}\n` +
-      `assunto: ${form.subject}\n\n` +
-      `mensagem: (descreva aqui o seu caso)`
+      `assunto: ${form.subject || "-"}\n\n` +
+      `mensagem: ${form.message || "-"}`
     ).toLowerCase();
 
     return `mailto:${TO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [form.name, form.phone, form.subject]);
+  }, [form.name, form.phone, form.subject, form.message]);
 
   return (
     <form
@@ -35,7 +65,7 @@ export default function ContactEmailForm() {
     >
       <div className="space-y-1">
         <label className="text-xs text-neutral-300" htmlFor="contact-name">
-          Nome
+          Nome*
         </label>
         <input
           id="contact-name"
@@ -49,15 +79,16 @@ export default function ContactEmailForm() {
 
       <div className="space-y-1">
         <label className="text-xs text-neutral-300" htmlFor="contact-phone">
-          Telefone
+          Telefone*
         </label>
         <input
           id="contact-phone"
           required
           type="tel"
           inputMode="tel"
+          autoComplete="tel"
           value={form.phone}
-          onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))}
+          onChange={(e) => setForm((p) => ({ ...p, phone: formatPhoneBR(e.target.value) }))}
           className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
           placeholder="(11) 91333-1559"
         />
@@ -69,11 +100,23 @@ export default function ContactEmailForm() {
         </label>
         <input
           id="contact-subject"
-          required
           value={form.subject}
           onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
           className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
           placeholder="Ex.: agendar atendimento"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs text-neutral-300" htmlFor="contact-message">
+          Mensagem
+        </label>
+        <textarea
+          id="contact-message"
+          value={form.message}
+          onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
+          className="min-h-40 w-full resize-none rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
+          placeholder="Descreva aqui o seu caso"
         />
       </div>
 
@@ -82,10 +125,6 @@ export default function ContactEmailForm() {
           Enviar e-mail
         </Button>
       </div>
-
-      <p className="text-xs text-neutral-500">
-        O texto do e-mail será gerado em caixa baixa.
-      </p>
     </form>
   );
 }

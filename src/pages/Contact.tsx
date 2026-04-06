@@ -26,9 +26,7 @@ export default function Contact() {
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <section className="rounded-2xl border border-gold/10 bg-neutral-950/40 p-6">
             <h2 className="text-lg font-semibold text-gold">WhatsApp</h2>
-            <p className="mt-2 text-sm text-neutral-300">
-              Clique para iniciar a conversa.
-            </p>
+            <p className="mt-2 text-sm text-neutral-300">Clique para iniciar a conversa.</p>
 
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
               <a
@@ -53,9 +51,6 @@ export default function Contact() {
 
           <section className="rounded-2xl border border-gold/10 bg-neutral-950/40 p-6">
             <h2 className="text-lg font-semibold text-gold">Enviar e-mail</h2>
-            <p className="mt-2 text-sm text-neutral-300">
-              Preencha para abrir seu app de e-mail com a mensagem pronta.
-            </p>
 
             <div className="mt-4 rounded-xl border border-gold/10 bg-black/40 p-4">
               <div className="text-sm text-neutral-300">
