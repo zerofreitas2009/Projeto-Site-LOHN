@@ -2,7 +2,6 @@ import SiteHeader from "../components/site/SiteHeader";
 import HeroSection from "../components/site/sections/HeroSection";
 import AboutSection from "../components/site/sections/AboutSection";
 import ServicesSection from "../components/site/sections/ServicesSection";
-import GallerySection from "../components/site/sections/GallerySection";
 import SiteFooter from "../components/site/SiteFooter";
 import WhatsAppFloatingButton from "../components/site/WhatsAppFloatingButton";
 
@@ -14,7 +13,6 @@ export default function Index() {
         <HeroSection />
         <AboutSection />
         <ServicesSection />
-        <GallerySection />
       </main>
       <SiteFooter />
       <WhatsAppFloatingButton />
