@@ -96,10 +96,11 @@ export default function ContactEmailForm() {
 
       <div className="space-y-1">
         <label className="text-xs text-neutral-300" htmlFor="contact-subject">
-          Assunto
+          Assunto*
         </label>
         <input
           id="contact-subject"
+          required
           value={form.subject}
           onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
           className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
