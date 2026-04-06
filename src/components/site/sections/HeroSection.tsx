@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 
 export default function HeroSection() {
@@ -23,9 +24,9 @@ export default function HeroSection() {
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <a href="#contato">
+              <Link to="/contato">
                 <Button>Agendar atendimento</Button>
-              </a>
+              </Link>
               <a href="#servicos">
                 <Button variant="outline">Ver serviços</Button>
               </a>
