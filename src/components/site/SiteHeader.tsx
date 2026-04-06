@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Button from "./ui/Button";
 
@@ -9,7 +10,7 @@ const navItems = [
   { label: "Sobre", href: "#sobre" },
   { label: "Serviços", href: "#servicos" },
   { label: "Galeria", href: "#galeria" },
-  { label: "Contato", href: "#contato" },
+  { label: "Contato", href: "/contato" },
 ];
 
 export default function SiteHeader() {
@@ -56,15 +57,25 @@ export default function SiteHeader() {
 
         {/* Desktop */}
         <nav className="hidden items-center gap-6 md:flex">
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm text-neutral-200/90 hover:text-gold transition"
-            >
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) =>
+            item.href.startsWith("/") ? (
+              <Link
+                key={item.href}
+                to={item.href}
+                className="text-sm text-neutral-200/90 hover:text-gold transition"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm text-neutral-200/90 hover:text-gold transition"
+              >
+                {item.label}
+              </a>
+            )
+          )}
           <a href={whatsappHref} target="_blank" rel="noreferrer">
             <Button variant="outline">WhatsApp</Button>
           </a>
@@ -103,16 +114,27 @@ export default function SiteHeader() {
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-              {navItems.map((item) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-md border border-gold/10 bg-neutral-950/40 px-4 py-3 text-sm text-neutral-200 hover:border-gold/30"
-                >
-                  {item.label}
-                </a>
-              ))}
+              {navItems.map((item) =>
+                item.href.startsWith("/") ? (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-md border border-gold/10 bg-neutral-950/40 px-4 py-3 text-sm text-neutral-200 hover:border-gold/30"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-md border border-gold/10 bg-neutral-950/40 px-4 py-3 text-sm text-neutral-200 hover:border-gold/30"
+                  >
+                    {item.label}
+                  </a>
+                )
+              )}
               <a href={whatsappHref} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                 <Button className="w-full">WhatsApp</Button>
               </a>
