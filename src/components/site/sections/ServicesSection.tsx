@@ -1,4 +1,4 @@
-import { Briefcase, FileText, Landmark, Scale, Users } from "lucide-react";
+import { Briefcase, Landmark, Scale, Users } from "lucide-react";
 import type { ComponentType } from "react";
 import { Card, CardDescription, CardTitle } from "../ui/Card";
 
@@ -67,24 +67,6 @@ const groups: ServiceGroup[] = [
       {
         title: "Guarda de menores",
         description: "Guarda, convivência e medidas necessárias para proteção do menor.",
-      },
-    ],
-  },
-  {
-    title: "Direito Civil",
-    icon: FileText,
-    items: [
-      {
-        title: "Inventário",
-        description: "Inventário judicial ou extrajudicial, com organização documental.",
-      },
-      {
-        title: "Partilha de bens",
-        description: "Definição e formalização de partilha em casos familiares e sucessórios.",
-      },
-      {
-        title: "Heranças e sucessões",
-        description: "Orientação em direitos sucessórios e regularização patrimonial.",
       },
     ],
   },
