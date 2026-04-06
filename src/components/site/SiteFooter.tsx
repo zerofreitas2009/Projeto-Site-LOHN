@@ -55,9 +55,8 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-gold/10 pt-6 text-xs text-neutral-500 md:flex-row md:items-center md:justify-between">
-          <div>© {new Date().getFullYear()} LOHN Advocacia. Todos os direitos reservados.</div>
-          <div className="text-neutral-600">Site estático — versão inicial para refinamento.</div>
+        <div className="mt-8 border-t border-gold/10 pt-6 text-xs text-neutral-500">
+          © {new Date().getFullYear()} LOHN Advocacia. Todos os direitos reservados.
         </div>
       </div>
     </footer>
