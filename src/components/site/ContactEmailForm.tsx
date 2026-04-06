@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { supabase } from "../../integrations/supabase/client";
 import Button from "./ui/Button";
 
 const TO_EMAIL = "advocacialohn@gmail.com";
@@ -33,6 +34,7 @@ function formatPhoneBR(input: string) {
 }
 
 export default function ContactEmailForm() {
+  const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<FormState>({
     name: "",
     phone: "",
@@ -42,7 +44,6 @@ export default function ContactEmailForm() {
 
   const mailtoHref = useMemo(() => {
     const subjectText = (form.subject || "contato").toLowerCase();
-
     const subject = `assunto: ${subjectText}`;
 
     const body = (
@@ -58,9 +59,25 @@ export default function ContactEmailForm() {
   return (
     <form
       className="mt-4 space-y-3"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        window.location.href = mailtoHref;
+        setSubmitting(true);
+
+        try {
+          await supabase.from("site_lohn_contacts").insert({
+            name: form.name,
+            phone: form.phone,
+            subject: form.subject,
+            message: form.message || null,
+            source: "Site-LOHN",
+          });
+        } catch (err) {
+          // Não bloqueia o envio do e-mail.
+          console.error("[site-lohn] falha ao salvar contato no Supabase", err);
+        } finally {
+          setSubmitting(false);
+          window.location.href = mailtoHref;
+        }
       }}
     >
       <div className="space-y-1">
@@ -122,8 +139,8 @@ export default function ContactEmailForm() {
       </div>
 
       <div className="pt-1">
-        <Button type="submit" className="w-full">
-          Enviar e-mail
+        <Button type="submit" className="w-full" disabled={submitting}>
+          {submitting ? "Enviando..." : "Enviar e-mail"}
         </Button>
       </div>
     </form>
