@@ -53,7 +53,7 @@ export default function HeroSection() {
               <img
                 src="/assets/atendimento-moderno.jpeg"
                 alt="Atendimento LOHN Advocacia"
-                className="h-[280px] w-full object-cover opacity-90 md:h-[420px]"
+                className="h-[280px] w-full object-cover object-top opacity-90 md:h-[420px]"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
