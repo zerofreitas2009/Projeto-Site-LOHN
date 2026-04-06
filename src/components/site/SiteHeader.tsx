@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Button from "./ui/Button";
 
+const WHATSAPP_NUMBER = "5511913331559";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+
 const navItems = [
   { label: "Sobre", href: "#sobre" },
   { label: "Serviços", href: "#servicos" },
@@ -27,6 +30,10 @@ export default function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(
+    "Olá! Vim pelo site da LOHN Advocacia e gostaria de atendimento."
+  )}`;
 
   return (
     <header className="sticky top-0 z-50 border-b border-gold/10 bg-black/70 backdrop-blur">
@@ -58,8 +65,8 @@ export default function SiteHeader() {
               {item.label}
             </a>
           ))}
-          <a href="#contato">
-            <Button variant="outline">Fale conosco</Button>
+          <a href={whatsappHref} target="_blank" rel="noreferrer">
+            <Button variant="outline">WhatsApp</Button>
           </a>
         </nav>
 
@@ -106,8 +113,8 @@ export default function SiteHeader() {
                   {item.label}
                 </a>
               ))}
-              <a href="#contato" onClick={() => setOpen(false)}>
-                <Button className="w-full">Fale conosco</Button>
+              <a href={whatsappHref} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
+                <Button className="w-full">WhatsApp</Button>
               </a>
             </div>
           </div>

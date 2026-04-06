@@ -1,5 +1,8 @@
 import Button from "./ui/Button";
 
+const WHATSAPP_NUMBER = "5511913331559";
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+
 export default function SiteFooter() {
   return (
     <footer id="contato" className="scroll-mt-24 border-t border-gold/10">
@@ -17,27 +20,50 @@ export default function SiteFooter() {
             <div className="text-sm font-semibold text-gold">Contato</div>
             <ul className="mt-3 space-y-2 text-sm text-neutral-300">
               <li>
-                <span className="text-neutral-400">Telefone:</span> (00) 00000-0000
+                <span className="text-neutral-400">WhatsApp:</span>{" "}
+                <a
+                  className="text-gold hover:text-gold-soft underline underline-offset-4"
+                  href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                    "Olá! Vim pelo site da LOHN Advocacia e gostaria de atendimento."
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  (11) 91333-1559
+                </a>
               </li>
               <li>
-                <span className="text-neutral-400">E-mail:</span> contato@exemplo.com
+                <span className="text-neutral-400">E-mail:</span>{" "}
+                <a
+                  className="text-gold hover:text-gold-soft underline underline-offset-4"
+                  href="mailto:Advocacialohn@gmail.com"
+                >
+                  Advocacialohn@gmail.com
+                </a>
               </li>
               <li>
-                <span className="text-neutral-400">Atendimento:</span> Seg–Sex, 9h–18h
+                <span className="text-neutral-400">Atendimento:</span> 24h
               </li>
             </ul>
-            <p className="mt-3 text-xs text-neutral-400">
-              (Os dados acima serão substituídos pelos dados exatos do documento anexado.)
-            </p>
           </div>
 
           <div>
             <div className="text-sm font-semibold text-gold">Ação rápida</div>
             <p className="mt-3 text-sm leading-relaxed text-neutral-300">
-              Envie uma mensagem e retornaremos o mais breve possível.
+              Clique para falar agora pelo WhatsApp.
             </p>
-            <div className="mt-4">
-              <a href="#top">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={`${WHATSAPP_URL}?text=${encodeURIComponent(
+                  "Olá! Vim pelo site da LOHN Advocacia e gostaria de falar com um advogado."
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex"
+              >
+                <Button>Enviar mensagem</Button>
+              </a>
+              <a href="#top" className="inline-flex">
                 <Button variant="outline">Voltar ao topo</Button>
               </a>
             </div>

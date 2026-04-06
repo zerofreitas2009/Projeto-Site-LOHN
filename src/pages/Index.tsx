@@ -4,6 +4,7 @@ import AboutSection from "../components/site/sections/AboutSection";
 import ServicesSection from "../components/site/sections/ServicesSection";
 import GallerySection from "../components/site/sections/GallerySection";
 import SiteFooter from "../components/site/SiteFooter";
+import WhatsAppFloatingButton from "../components/site/WhatsAppFloatingButton";
 
 export default function Index() {
   return (
@@ -16,6 +17,7 @@ export default function Index() {
         <GallerySection />
       </main>
       <SiteFooter />
+      <WhatsAppFloatingButton />
     </div>
   );
 }
