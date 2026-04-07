@@ -1,8 +1,6 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { supabase } from "../../integrations/supabase/client";
 import Button from "./ui/Button";
-
-const TO_EMAIL = "advocacialohn@gmail.com";
 
 type FormState = {
   name: string;
@@ -35,6 +33,7 @@ function formatPhoneBR(input: string) {
 
 export default function ContactEmailForm() {
   const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [form, setForm] = useState<FormState>({
     name: "",
     phone: "",
@@ -42,41 +41,47 @@ export default function ContactEmailForm() {
     message: "",
   });
 
-  const mailtoHref = useMemo(() => {
-    const subjectText = (form.subject || "contato").toLowerCase();
-    const subject = `assunto: ${subjectText}`;
-
-    const body = (
-      `nome: ${form.name}\n` +
-      `telefone: ${form.phone}\n` +
-      `assunto: ${form.subject || "-"}\n\n` +
-      `mensagem: ${form.message || "-"}`
-    ).toLowerCase();
-
-    return `mailto:${TO_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  }, [form.name, form.phone, form.subject, form.message]);
-
   return (
     <form
       className="mt-4 space-y-3"
       onSubmit={async (e) => {
         e.preventDefault();
         setSubmitting(true);
+        setStatus("idle");
 
         try {
-          await supabase.from("site_lohn_contacts").insert({
-            name: form.name,
-            phone: form.phone,
-            subject: form.subject,
-            message: form.message || null,
-            source: "Site-LOHN",
+          // Log no banco (não bloqueia o envio se falhar)
+          try {
+            await supabase.from("site_lohn_contacts").insert({
+              name: form.name,
+              phone: form.phone,
+              subject: form.subject,
+              message: form.message || null,
+              source: "Site-LOHN",
+            });
+          } catch (err) {
+            console.error("[site-lohn] falha ao salvar contato no Supabase", err);
+          }
+
+          const { data, error } = await supabase.functions.invoke("send-contact-email", {
+            body: {
+              name: form.name,
+              phone: form.phone,
+              subject: form.subject,
+              message: form.message || null,
+            },
           });
+
+          if (error) throw error;
+          if (!data?.ok) throw new Error("Falha ao enviar");
+
+          setStatus("success");
+          setForm({ name: "", phone: "", subject: "", message: "" });
         } catch (err) {
-          // Não bloqueia o envio do e-mail.
-          console.error("[site-lohn] falha ao salvar contato no Supabase", err);
+          console.error("[site-lohn] falha ao enviar via Resend", err);
+          setStatus("error");
         } finally {
           setSubmitting(false);
-          window.location.href = mailtoHref;
         }
       }}
     >
@@ -138,9 +143,21 @@ export default function ContactEmailForm() {
         />
       </div>
 
+      {status === "success" ? (
+        <div className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">
+          Mensagem enviada com sucesso. Em breve entraremos em contato.
+        </div>
+      ) : null}
+
+      {status === "error" ? (
+        <div className="rounded-md border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+          Não foi possível enviar sua mensagem agora. Tente novamente em instantes.
+        </div>
+      ) : null}
+
       <div className="pt-1">
         <Button type="submit" className="w-full" disabled={submitting}>
-          {submitting ? "Enviando..." : "Enviar e-mail"}
+          {submitting ? "Enviando..." : "Enviar mensagem"}
         </Button>
       </div>
     </form>
