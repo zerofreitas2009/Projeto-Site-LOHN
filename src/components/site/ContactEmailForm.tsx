@@ -66,14 +66,17 @@ export default function ContactEmailForm() {
             console.error("[site-lohn] falha ao salvar contato no Supabase", err);
           }
 
-          const { data, error } = await supabase.functions.invoke("send-contact-email", {
-            body: {
-              name: form.name,
-              phone: form.phone,
-              subject: form.subject,
-              message: form.message || null,
-            },
-          });
+          const { data, error } = await supabase.functions.invoke(
+            "site_lohn_send_contact_email",
+            {
+              body: {
+                name: form.name,
+                phone: form.phone,
+                subject: form.subject,
+                message: form.message || null,
+              },
+            }
+          );
 
           if (error) throw error;
           if (!data?.ok) throw new Error("Falha ao enviar");

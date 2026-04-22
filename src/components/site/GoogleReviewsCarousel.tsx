@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { supabase } from "../../integrations/supabase/client";
 
 type GoogleReview = {
   author_name: string;
@@ -10,32 +11,6 @@ type GoogleReview = {
 };
 
 type LoadState = "idle" | "loading" | "ready" | "error";
-
-function loadGoogleMapsPlaces(apiKey: string) {
-  if (typeof window === "undefined") return Promise.reject(new Error("No window"));
-
-  const existing = document.getElementById("google-maps-js");
-  if (existing) {
-    return new Promise<void>((resolve, reject) => {
-      if ((window as any).google?.maps?.places) return resolve();
-      existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error("Failed to load Google Maps")), {
-        once: true,
-      });
-    });
-  }
-
-  return new Promise<void>((resolve, reject) => {
-    const script = document.createElement("script");
-    script.id = "google-maps-js";
-    script.async = true;
-    script.defer = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&libraries=places&language=pt-BR&region=BR`;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error("Failed to load Google Maps"));
-    document.head.appendChild(script);
-  });
-}
 
 function renderStars(rating: number) {
   const full = Math.max(0, Math.min(5, Math.round(rating)));
@@ -52,7 +27,6 @@ function renderStars(rating: number) {
 }
 
 export default function GoogleReviewsCarousel() {
-  const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY as string | undefined;
   const placeId = import.meta.env.VITE_GOOGLE_PLACE_ID as string | undefined;
 
   const [state, setState] = useState<LoadState>("idle");
@@ -63,7 +37,7 @@ export default function GoogleReviewsCarousel() {
   const scrollerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!apiKey || !placeId) {
+    if (!placeId) {
       setState("error");
       return;
     }
@@ -71,55 +45,29 @@ export default function GoogleReviewsCarousel() {
     let cancelled = false;
     setState("loading");
 
-    loadGoogleMapsPlaces(apiKey)
-      .then(() => {
+    supabase.functions
+      .invoke("site_lohn_google_reviews", {
+        body: { placeId },
+      })
+      .then(({ data, error }) => {
         if (cancelled) return;
+        if (error) throw error;
+        if (!data?.ok) throw new Error("Falha ao carregar avaliações");
 
-        const google = (window as any).google;
-        if (!google?.maps?.places) throw new Error("Places library not available");
-
-        const service = new google.maps.places.PlacesService(document.createElement("div"));
-        service.getDetails(
-          {
-            placeId,
-            fields: ["name", "url", "rating", "reviews"],
-          },
-          (place: any, status: any) => {
-            if (cancelled) return;
-
-            if (status !== google.maps.places.PlacesServiceStatus.OK || !place) {
-              console.error("[site-lohn] google places status", status);
-              setState("error");
-              return;
-            }
-
-            setPlaceName(place?.name ?? "");
-            setPlaceUrl(place?.url ?? "");
-
-            const fetched: GoogleReview[] = Array.isArray(place?.reviews)
-              ? place.reviews.map((r: any) => ({
-                  author_name: r.author_name,
-                  rating: Number(r.rating) || 0,
-                  text: String(r.text || ""),
-                  relative_time_description: r.relative_time_description,
-                  time: typeof r.time === "number" ? r.time : undefined,
-                }))
-              : [];
-
-            setReviews(fetched);
-            setState("ready");
-          }
-        );
+        setPlaceName(data?.place?.name ?? "");
+        setPlaceUrl(data?.place?.url ?? "");
+        setReviews(Array.isArray(data?.reviews) ? data.reviews : []);
+        setState("ready");
       })
       .catch((err) => {
         console.error("[site-lohn] falha ao carregar avaliações do Google", err);
-        setState("error");
+        if (!cancelled) setState("error");
       });
 
     return () => {
       cancelled = true;
     };
-  }, [apiKey, placeId]);
+  }, [placeId]);
 
   const sorted = useMemo(() => {
     const copy = [...reviews];
@@ -129,7 +77,6 @@ export default function GoogleReviewsCarousel() {
       return (b.time ?? 0) - (a.time ?? 0);
     });
 
-    // Prioriza 5 estrelas (mantendo também as demais, caso existam)
     const five = copy.filter((r) => r.rating === 5);
     const rest = copy.filter((r) => r.rating !== 5);
     return [...five, ...rest].slice(0, 12);
@@ -145,16 +92,14 @@ export default function GoogleReviewsCarousel() {
     el.scrollBy({ left: direction * (cardWidth + gap), behavior: "smooth" });
   };
 
-  const missingConfig = !apiKey || !placeId;
+  const missingConfig = !placeId;
 
   return (
     <section aria-label="Avaliações do Google" className="scroll-mt-24">
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="text-xs font-medium tracking-[0.22em] text-gold/80">
-              AVALIAÇÕES
-            </p>
+            <p className="text-xs font-medium tracking-[0.22em] text-gold/80">AVALIAÇÕES</p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">
               O que dizem no Google
             </h2>
@@ -179,7 +124,7 @@ export default function GoogleReviewsCarousel() {
           <div className="flex items-center justify-between gap-3">
             <div className="text-sm text-neutral-700">
               {missingConfig
-                ? "Configuração pendente (API Key / Place ID)."
+                ? "Configuração pendente (Place ID)."
                 : state === "loading"
                   ? "Carregando avaliações..."
                   : state === "error"
@@ -223,9 +168,7 @@ export default function GoogleReviewsCarousel() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-sm font-semibold text-neutral-900">
-                      {r.author_name}
-                    </div>
+                    <div className="text-sm font-semibold text-neutral-900">{r.author_name}</div>
                     <div className="mt-1 text-xs text-neutral-500">
                       {r.relative_time_description ?? ""}
                     </div>
@@ -264,8 +207,7 @@ export default function GoogleReviewsCarousel() {
 
         {missingConfig ? (
           <p className="mt-3 text-xs text-neutral-500">
-            Defina <span className="font-mono">VITE_GOOGLE_PLACES_API_KEY</span> e{" "}
-            <span className="font-mono">VITE_GOOGLE_PLACE_ID</span> no arquivo .env.
+            Defina <span className="font-mono">VITE_GOOGLE_PLACE_ID</span> no arquivo .env.
           </p>
         ) : null}
       </div>

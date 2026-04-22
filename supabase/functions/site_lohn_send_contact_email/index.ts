@@ -34,7 +34,7 @@ serve(async (req) => {
 
   const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
   if (!RESEND_API_KEY) {
-    console.error("[send-contact-email] missing RESEND_API_KEY secret");
+    console.error("[site_lohn_send_contact_email] missing RESEND_API_KEY secret");
     return new Response(JSON.stringify({ error: "Server not configured" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -48,14 +48,18 @@ serve(async (req) => {
   try {
     payload = (await req.json()) as ContactPayload;
   } catch (err) {
-    console.error("[send-contact-email] invalid json body", { err });
+    console.error("[site_lohn_send_contact_email] invalid json body", { err });
     return new Response(JSON.stringify({ error: "Invalid JSON" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 
-  if (!isNonEmptyString(payload.name) || !isNonEmptyString(payload.phone) || !isNonEmptyString(payload.subject)) {
+  if (
+    !isNonEmptyString(payload.name) ||
+    !isNonEmptyString(payload.phone) ||
+    !isNonEmptyString(payload.subject)
+  ) {
     return new Response(JSON.stringify({ error: "Missing required fields" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -108,7 +112,7 @@ serve(async (req) => {
 
     if (!resendResp.ok) {
       const errorBody = await resendResp.text().catch(() => "");
-      console.error("[send-contact-email] resend error", {
+      console.error("[site_lohn_send_contact_email] resend error", {
         status: resendResp.status,
         errorBody,
       });
@@ -120,14 +124,14 @@ serve(async (req) => {
     }
 
     const data = await resendResp.json().catch(() => ({}));
-    console.log("[send-contact-email] sent", { id: data?.id });
+    console.log("[site_lohn_send_contact_email] sent", { id: data?.id });
 
     return new Response(JSON.stringify({ ok: true, id: data?.id }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err) {
-    console.error("[send-contact-email] unexpected error", { err });
+    console.error("[site_lohn_send_contact_email] unexpected error", { err });
     return new Response(JSON.stringify({ error: "Unexpected error" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
