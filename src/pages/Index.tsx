@@ -4,7 +4,7 @@ import AboutSection from "../components/site/sections/AboutSection";
 import ServicesSection from "../components/site/sections/ServicesSection";
 import SiteFooter from "../components/site/SiteFooter";
 import WhatsAppFloatingButton from "../components/site/WhatsAppFloatingButton";
-import GoogleReviewsCarousel from "../components/site/GoogleReviewsCarousel";
+import SiteReviewsSection from "../components/site/SiteReviewsSection";
 
 export default function Index() {
   return (
@@ -14,7 +14,7 @@ export default function Index() {
         <HeroSection />
         <AboutSection />
         <ServicesSection />
-        <GoogleReviewsCarousel />
+        <SiteReviewsSection />
       </main>
       <SiteFooter />
       <WhatsAppFloatingButton />

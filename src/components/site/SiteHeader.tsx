@@ -14,6 +14,7 @@ const navItems: NavItem[] = [
   { label: "Início", kind: "route", to: "/" },
   { label: "Sobre", kind: "hash", hash: "#sobre" },
   { label: "Serviços", kind: "hash", hash: "#servicos" },
+  { label: "Avaliações", kind: "hash", hash: "#avaliacoes" },
   { label: "Contato", kind: "route", to: "/contato" },
 ];
 
