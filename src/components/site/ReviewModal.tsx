@@ -6,6 +6,48 @@ import { SITE_LOHN_REVIEW_MODAL_EVENT } from "./reviewModalBus";
 
 type SubmitState = "idle" | "sending" | "sent" | "error";
 
+type ServiceGroup = {
+  title: string;
+  items: string[];
+};
+
+const serviceGroups: ServiceGroup[] = [
+  {
+    title: "Direito Criminal",
+    items: [
+      "Atuação em Inquérito Policial",
+      "Flagrantes",
+      "Audiência de Custódia",
+      "Defesa em PAD",
+      "Execução Penal",
+      "Processo Criminal",
+      "Habeas Corpus",
+      "Diligência em penitenciária ou delegacia",
+    ],
+  },
+  {
+    title: "Direito de Família e Sucessões",
+    items: [
+      "Divórcio consensual e litigioso",
+      "Pensão alimentícia",
+      "Guarda de menores",
+      "Inventário",
+      "Partilha de bens",
+      "Heranças e sucessões",
+    ],
+  },
+  {
+    title: "Direito Previdenciário",
+    items: [
+      "Aposentadorias",
+      "Auxílio-doença / incapacidade",
+      "BPC/LOAS",
+      "Pensão por morte",
+      "Revisão de benefício",
+    ],
+  },
+];
+
 function StarPicker({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <div className="flex items-center gap-1" aria-label="Selecione a nota">
@@ -37,6 +79,7 @@ export default function ReviewModal({
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
+  const [service, setService] = useState<string>("");
   const [comment, setComment] = useState("");
 
   const canSubmit = useMemo(() => {
@@ -114,6 +157,7 @@ export default function ReviewModal({
             const { error } = await supabase.from("site_lohn_reviews").insert({
               name: name.trim(),
               rating,
+              service: service.trim() ? service.trim() : null,
               comment: comment.trim(),
               approved: false,
             });
@@ -127,6 +171,7 @@ export default function ReviewModal({
             setSubmitState("sent");
             setName("");
             setRating(5);
+            setService("");
             setComment("");
             onSubmitted?.();
           }}
@@ -148,6 +193,29 @@ export default function ReviewModal({
           <div className="space-y-1">
             <div className="text-xs text-neutral-700">Nota*</div>
             <StarPicker value={rating} onChange={setRating} />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs text-neutral-700" htmlFor="review-modal-service">
+              Serviço (opcional)
+            </label>
+            <select
+              id="review-modal-service"
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+              className="w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-neutral-900 outline-none focus:border-gold/50"
+            >
+              <option value="">Selecione (opcional)</option>
+              {serviceGroups.map((g) => (
+                <optgroup key={g.title} label={g.title}>
+                  {g.items.map((item) => (
+                    <option key={`${g.title}-${item}`} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-1">

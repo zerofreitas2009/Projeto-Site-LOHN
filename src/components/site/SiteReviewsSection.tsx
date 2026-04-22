@@ -9,6 +9,7 @@ type ReviewRow = {
   id: string;
   name: string;
   rating: number;
+  service?: string | null;
   comment: string;
   created_at: string;
 };
@@ -39,7 +40,7 @@ export default function SiteReviewsSection() {
     setState("loading");
     const { data, error } = await supabase
       .from("site_lohn_reviews")
-      .select("id,name,rating,comment,created_at")
+      .select("id,name,rating,service,comment,created_at")
       .eq("approved", true)
       .order("created_at", { ascending: false })
       .limit(24);
@@ -151,7 +152,14 @@ export default function SiteReviewsSection() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-sm font-semibold text-neutral-900">{r.name}</div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <div className="text-sm font-semibold text-neutral-900">{r.name}</div>
+                      {r.service ? (
+                        <span className="rounded-full border border-gold/20 bg-gold/5 px-2 py-0.5 text-xs text-neutral-700">
+                          {r.service}
+                        </span>
+                      ) : null}
+                    </div>
                     <div className="mt-1 text-xs text-neutral-500">
                       {new Date(r.created_at).toLocaleDateString("pt-BR")}
                     </div>

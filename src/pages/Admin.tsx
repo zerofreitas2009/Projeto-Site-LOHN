@@ -9,6 +9,7 @@ type ReviewRow = {
   id: string;
   name: string;
   rating: number;
+  service?: string | null;
   comment: string;
   approved: boolean;
   created_at: string;
@@ -51,7 +52,7 @@ export default function Admin() {
     setStatus("loading");
     const { data, error } = await supabase
       .from("site_lohn_reviews")
-      .select("id,name,rating,comment,approved,created_at")
+      .select("id,name,rating,service,comment,approved,created_at")
       .order("created_at", { ascending: false })
       .limit(50);
 
@@ -137,9 +138,14 @@ export default function Admin() {
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2">
                       <div className="text-sm font-semibold text-neutral-900">{r.name}</div>
                       <Stars rating={r.rating} />
+                      {r.service ? (
+                        <span className="rounded-full border border-gold/20 bg-gold/5 px-2 py-0.5 text-xs text-neutral-700">
+                          {r.service}
+                        </span>
+                      ) : null}
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs ${
                           r.approved
