@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Button from "./ui/Button";
+import { openSiteLohnReviewModal } from "./reviewModalBus";
 
 const WHATSAPP_NUMBER = "5511913331559";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 type NavItem =
   | { label: string; kind: "route"; to: string }
-  | { label: string; kind: "hash"; hash: string };
+  | { label: string; kind: "hash"; hash: string }
+  | { label: string; kind: "action"; action: "open_review_modal" };
 
 const navItems: NavItem[] = [
   { label: "Início", kind: "route", to: "/" },
   { label: "Sobre", kind: "hash", hash: "#sobre" },
   { label: "Serviços", kind: "hash", hash: "#servicos" },
-  { label: "Avaliações", kind: "hash", hash: "#avaliacoes" },
+  { label: "Avaliações", kind: "action", action: "open_review_modal" },
   { label: "Contato", kind: "route", to: "/contato" },
 ];
 
@@ -42,6 +44,12 @@ export default function SiteHeader() {
   const whatsappHref = `${WHATSAPP_URL}?text=${encodeURIComponent(
     "Olá! Vim pelo site da LOHN Advocacia e gostaria de atendimento."
   )}`;
+
+  const handleItem = (item: NavItem) => {
+    if (item.kind === "action" && item.action === "open_review_modal") {
+      openSiteLohnReviewModal();
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-gold/15 bg-white/80 backdrop-blur">
@@ -74,6 +82,19 @@ export default function SiteHeader() {
                 >
                   {item.label}
                 </Link>
+              );
+            }
+
+            if (item.kind === "action") {
+              return (
+                <button
+                  key={item.action}
+                  type="button"
+                  onClick={() => handleItem(item)}
+                  className="text-sm text-neutral-700 hover:text-gold transition"
+                >
+                  {item.label}
+                </button>
               );
             }
 
@@ -137,6 +158,22 @@ export default function SiteHeader() {
                     >
                       {item.label}
                     </Link>
+                  );
+                }
+
+                if (item.kind === "action") {
+                  return (
+                    <button
+                      key={item.action}
+                      type="button"
+                      onClick={() => {
+                        setOpen(false);
+                        handleItem(item);
+                      }}
+                      className="text-left rounded-md border border-gold/20 bg-white px-4 py-3 text-sm text-neutral-900 hover:border-gold/40"
+                    >
+                      {item.label}
+                    </button>
                   );
                 }
 
