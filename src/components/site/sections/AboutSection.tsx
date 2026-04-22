@@ -11,12 +11,12 @@ export default function AboutSection() {
             <h2 className="mt-4 text-2xl font-semibold tracking-tight text-gold sm:text-3xl">
               Atendimento humanizado, com foco em resultado
             </h2>
-            <p className="mt-4 leading-relaxed text-neutral-200/90">
+            <p className="mt-4 leading-relaxed text-neutral-700">
               Atuamos com seriedade e discrição, oferecendo orientação jurídica com clareza
               e responsabilidade. O objetivo é construir a melhor estratégia para cada caso,
               com acompanhamento próximo e comunicação objetiva.
             </p>
-            <p className="mt-4 leading-relaxed text-neutral-300">
+            <p className="mt-4 leading-relaxed text-neutral-600">
               (Observação: os textos finais desta seção serão ajustados conforme o conteúdo
               do documento anexado.)
             </p>

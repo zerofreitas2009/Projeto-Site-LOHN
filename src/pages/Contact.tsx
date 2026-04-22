@@ -9,7 +9,7 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function Contact() {
   return (
-    <div className="min-h-dvh bg-black text-neutral-200">
+    <div className="min-h-dvh bg-white text-neutral-900">
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-6xl px-4 py-14 md:py-20">
@@ -18,15 +18,15 @@ export default function Contact() {
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-gold sm:text-4xl">
             Fale com a LOHN Advocacia
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-neutral-200/90">
+          <p className="mt-4 text-base leading-relaxed text-neutral-700">
             Atendimento 24h. Escolha a melhor forma para falar conosco.
           </p>
         </div>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <section className="rounded-2xl border border-gold/10 bg-neutral-950/40 p-6">
+          <section className="rounded-2xl border border-gold/15 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gold">WhatsApp</h2>
-            <p className="mt-2 text-sm text-neutral-300">Clique para iniciar a conversa.</p>
+            <p className="mt-2 text-sm text-neutral-700">Clique para iniciar a conversa.</p>
 
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
               <a
@@ -44,17 +44,17 @@ export default function Contact() {
               </a>
             </div>
 
-            <div className="mt-4 text-sm text-neutral-300">
-              <span className="text-neutral-400">Telefone:</span> (11) 91333-1559
+            <div className="mt-4 text-sm text-neutral-700">
+              <span className="text-neutral-500">Telefone:</span> (11) 91333-1559
             </div>
           </section>
 
-          <section className="rounded-2xl border border-gold/10 bg-neutral-950/40 p-6">
+          <section className="rounded-2xl border border-gold/15 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gold">Enviar e-mail</h2>
 
-            <div className="mt-4 rounded-xl border border-gold/10 bg-black/40 p-4">
-              <div className="text-sm text-neutral-300">
-                <span className="text-neutral-400">E-mail:</span>{" "}
+            <div className="mt-4 rounded-xl border border-gold/15 bg-white p-4">
+              <div className="text-sm text-neutral-700">
+                <span className="text-neutral-500">E-mail:</span>{" "}
                 <a
                   className="text-gold hover:text-gold-soft underline underline-offset-4"
                   href="mailto:advocacialohn@gmail.com"

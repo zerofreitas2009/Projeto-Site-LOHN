@@ -119,7 +119,7 @@ export default function ServicesSection() {
           <h2 className="mt-4 text-2xl font-semibold tracking-tight text-gold sm:text-3xl">
             Áreas de atuação
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-200/90">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-700">
             Serviços organizados por área para facilitar a visualização.
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function ServicesSection() {
           {groups.map((group) => (
             <div key={group.title}>
               <div className="flex items-center gap-3">
-                <div className="rounded-lg border border-gold/15 bg-neutral-950/40 p-2">
+                <div className="rounded-lg border border-gold/15 bg-white p-2 shadow-sm">
                   <group.icon className="h-4 w-4 text-gold" />
                 </div>
                 <h3 className="text-lg font-semibold tracking-tight text-gold">{group.title}</h3>
@@ -146,14 +146,14 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        <div className="mt-10 rounded-xl border border-gold/10 bg-neutral-950/40 p-5">
+        <div className="mt-10 rounded-xl border border-gold/15 bg-white p-5 shadow-sm">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 rounded-lg border border-gold/15 bg-black p-2">
+            <div className="mt-0.5 rounded-lg border border-gold/15 bg-white p-2 shadow-sm">
               <Briefcase className="h-4 w-4 text-gold" />
             </div>
             <div>
               <div className="text-sm font-semibold text-gold">Atendimento 24h</div>
-              <div className="mt-1 text-sm text-neutral-300">
+              <div className="mt-1 text-sm text-neutral-700">
                 Para urgências, fale diretamente pelo WhatsApp.
               </div>
             </div>

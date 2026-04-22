@@ -7,7 +7,7 @@ import WhatsAppFloatingButton from "../components/site/WhatsAppFloatingButton";
 
 export default function Index() {
   return (
-    <div className="min-h-dvh bg-black text-neutral-200">
+    <div className="min-h-dvh bg-white text-neutral-900">
       <SiteHeader />
       <main>
         <HeroSection />

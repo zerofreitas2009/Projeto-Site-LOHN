@@ -43,7 +43,7 @@ export default function SiteHeader() {
   )}`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gold/10 bg-black/70 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-gold/15 bg-white/80 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-4">
         {/* Marca */}
         <Link to="/" className="flex items-center gap-3">
@@ -57,7 +57,7 @@ export default function SiteHeader() {
             <div className="text-sm font-semibold tracking-wide text-gold">
               LOHN ADVOCACIA
             </div>
-            <div className="text-xs text-neutral-300">Prestação de serviços jurídicos</div>
+            <div className="text-xs text-neutral-600">Prestação de serviços jurídicos</div>
           </div>
         </Link>
 
@@ -69,7 +69,7 @@ export default function SiteHeader() {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="text-sm text-neutral-200/90 hover:text-gold transition"
+                  className="text-sm text-neutral-700 hover:text-gold transition"
                 >
                   {item.label}
                 </Link>
@@ -81,7 +81,7 @@ export default function SiteHeader() {
               <a
                 key={item.hash}
                 href={href}
-                className="text-sm text-neutral-200/90 hover:text-gold transition"
+                className="text-sm text-neutral-700 hover:text-gold transition"
               >
                 {item.label}
               </a>
@@ -95,7 +95,7 @@ export default function SiteHeader() {
         {/* Mobile */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md border border-gold/20 bg-neutral-950/60 p-2 text-gold md:hidden"
+          className="inline-flex items-center justify-center rounded-md border border-gold/25 bg-white p-2 text-gold md:hidden"
           aria-label={open ? "Fechar menu" : "Abrir menu"}
           onClick={() => setOpen((v) => !v)}
         >
@@ -107,16 +107,16 @@ export default function SiteHeader() {
       {open ? (
         <div className="fixed inset-0 z-50 md:hidden">
           <div
-            className="absolute inset-0 bg-black/80"
+            className="absolute inset-0 bg-black/40"
             onClick={() => setOpen(false)}
             aria-hidden
           />
-          <div className="absolute right-0 top-0 h-full w-[86%] max-w-sm border-l border-gold/15 bg-neutral-950 p-6 shadow-2xl">
+          <div className="absolute right-0 top-0 h-full w-[86%] max-w-sm border-l border-gold/20 bg-white p-6 shadow-2xl">
             <div className="flex items-center justify-between">
               <div className="text-sm font-semibold tracking-wide text-gold">Menu</div>
               <button
                 type="button"
-                className="rounded-md border border-gold/25 bg-neutral-900 p-2 text-gold"
+                className="rounded-md border border-gold/25 bg-white p-2 text-gold"
                 aria-label="Fechar menu"
                 onClick={() => setOpen(false)}
               >
@@ -132,7 +132,7 @@ export default function SiteHeader() {
                       key={item.to}
                       to={item.to}
                       onClick={() => setOpen(false)}
-                      className="rounded-md border border-gold/15 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 hover:border-gold/30 hover:bg-neutral-900/80"
+                      className="rounded-md border border-gold/20 bg-white px-4 py-3 text-sm text-neutral-900 hover:border-gold/40"
                     >
                       {item.label}
                     </Link>
@@ -145,7 +145,7 @@ export default function SiteHeader() {
                     key={item.hash}
                     href={href}
                     onClick={() => setOpen(false)}
-                    className="rounded-md border border-gold/15 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 hover:border-gold/30 hover:bg-neutral-900/80"
+                    className="rounded-md border border-gold/20 bg-white px-4 py-3 text-sm text-neutral-900 hover:border-gold/40"
                   >
                     {item.label}
                   </a>

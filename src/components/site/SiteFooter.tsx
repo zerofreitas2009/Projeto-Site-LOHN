@@ -6,22 +6,22 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-gold/10">
+    <footer className="border-t border-gold/15">
       <div className="mx-auto w-full max-w-6xl px-4 py-10">
         <div className="grid gap-6 md:grid-cols-3 md:items-start">
           <div>
             <div className="text-sm font-semibold tracking-wide text-gold">LOHN ADVOCACIA</div>
-            <div className="mt-1 text-xs text-neutral-400">Prestação de serviços jurídicos</div>
-            <div className="mt-4 text-sm text-neutral-300">
-              <span className="text-neutral-400">Atendimento:</span> 24h
+            <div className="mt-1 text-xs text-neutral-600">Prestação de serviços jurídicos</div>
+            <div className="mt-4 text-sm text-neutral-700">
+              <span className="text-neutral-500">Atendimento:</span> 24h
             </div>
           </div>
 
           <div>
             <div className="text-sm font-semibold text-gold">Contato</div>
-            <div className="mt-3 space-y-2 text-sm text-neutral-300">
+            <div className="mt-3 space-y-2 text-sm text-neutral-700">
               <div>
-                <span className="text-neutral-400">WhatsApp:</span>{" "}
+                <span className="text-neutral-500">WhatsApp:</span>{" "}
                 <a
                   className="text-gold hover:text-gold-soft underline underline-offset-4"
                   href={`${WHATSAPP_URL}?text=${encodeURIComponent(
@@ -34,7 +34,7 @@ export default function SiteFooter() {
                 </a>
               </div>
               <div>
-                <span className="text-neutral-400">E-mail:</span>{" "}
+                <span className="text-neutral-500">E-mail:</span>{" "}
                 <a
                   className="text-gold hover:text-gold-soft underline underline-offset-4"
                   href="mailto:advocacialohn@gmail.com"
@@ -55,7 +55,7 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-gold/10 pt-6 text-xs text-neutral-500">
+        <div className="mt-8 border-t border-gold/15 pt-6 text-xs text-neutral-500">
           © {new Date().getFullYear()} LOHN Advocacia. Todos os direitos reservados.
         </div>
       </div>

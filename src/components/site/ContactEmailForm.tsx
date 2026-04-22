@@ -41,6 +41,9 @@ export default function ContactEmailForm() {
     message: "",
   });
 
+  const inputClass =
+    "w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-gold/50";
+
   return (
     <form
       className="mt-4 space-y-3"
@@ -86,7 +89,7 @@ export default function ContactEmailForm() {
       }}
     >
       <div className="space-y-1">
-        <label className="text-xs text-neutral-300" htmlFor="contact-name">
+        <label className="text-xs text-neutral-700" htmlFor="contact-name">
           Nome*
         </label>
         <input
@@ -94,13 +97,13 @@ export default function ContactEmailForm() {
           required
           value={form.name}
           onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
-          className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
+          className={inputClass}
           placeholder="Seu nome"
         />
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-300" htmlFor="contact-phone">
+        <label className="text-xs text-neutral-700" htmlFor="contact-phone">
           Telefone*
         </label>
         <input
@@ -111,13 +114,13 @@ export default function ContactEmailForm() {
           autoComplete="tel"
           value={form.phone}
           onChange={(e) => setForm((p) => ({ ...p, phone: formatPhoneBR(e.target.value) }))}
-          className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
+          className={inputClass}
           placeholder="(11) 91333-1559"
         />
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-300" htmlFor="contact-subject">
+        <label className="text-xs text-neutral-700" htmlFor="contact-subject">
           Assunto*
         </label>
         <input
@@ -125,32 +128,32 @@ export default function ContactEmailForm() {
           required
           value={form.subject}
           onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
-          className="w-full rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
+          className={inputClass}
           placeholder="Ex.: agendar atendimento"
         />
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-300" htmlFor="contact-message">
+        <label className="text-xs text-neutral-700" htmlFor="contact-message">
           Mensagem
         </label>
         <textarea
           id="contact-message"
           value={form.message}
           onChange={(e) => setForm((p) => ({ ...p, message: e.target.value }))}
-          className="min-h-40 w-full resize-none rounded-md border border-gold/15 bg-neutral-950/40 px-3 py-2 text-sm text-neutral-100 outline-none placeholder:text-neutral-500 focus:border-gold/40"
+          className={`${inputClass} min-h-40 resize-none`}
           placeholder="Descreva aqui o seu caso"
         />
       </div>
 
       {status === "success" ? (
-        <div className="rounded-md border border-emerald-500/20 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-200">
+        <div className="rounded-md border border-emerald-600/20 bg-emerald-600/10 px-3 py-2 text-xs text-emerald-800">
           Mensagem enviada com sucesso. Em breve entraremos em contato.
         </div>
       ) : null}
 
       {status === "error" ? (
-        <div className="rounded-md border border-red-500/20 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+        <div className="rounded-md border border-red-600/20 bg-red-600/10 px-3 py-2 text-xs text-red-800">
           Não foi possível enviar sua mensagem agora. Tente novamente em instantes.
         </div>
       ) : null}
