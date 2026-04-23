@@ -70,11 +70,7 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
   );
 }
 
-export default function ReviewModal({
-  onSubmitted,
-}: {
-  onSubmitted?: () => void;
-}) {
+export default function ReviewModal({ onSubmitted }: { onSubmitted?: () => void }) {
   const [open, setOpen] = useState(false);
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [name, setName] = useState("");
@@ -154,18 +150,35 @@ export default function ReviewModal({
 
             setSubmitState("sending");
 
-            const { error } = await supabase.from("site_lohn_reviews").insert({
+            const payload = {
               name: name.trim(),
               rating,
               service: service.trim() ? service.trim() : null,
               comment: comment.trim(),
               approved: false,
-            });
+            };
+
+            const { error } = await supabase.from("site_lohn_reviews").insert(payload);
 
             if (error) {
               console.error("[site-lohn] falha ao enviar avaliação", error);
               setSubmitState("error");
               return;
+            }
+
+            // Notificação por e-mail (não bloqueia o sucesso do usuário)
+            try {
+              await supabase.functions.invoke("site_lohn_notify_review_pending", {
+                body: {
+                  name: payload.name,
+                  rating: payload.rating,
+                  service: payload.service,
+                  comment: payload.comment,
+                  adminUrl: "https://advocacialohn.adv.br/admin",
+                },
+              });
+            } catch (notifyErr) {
+              console.error("[site-lohn] falha ao notificar avaliação pendente", notifyErr);
             }
 
             setSubmitState("sent");
