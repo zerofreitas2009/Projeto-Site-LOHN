@@ -115,9 +115,9 @@ export default function SiteReviewsSection() {
                   ? "Não foi possível carregar as avaliações agora."
                   : sorted.length === 0
                     ? "Nenhuma avaliação publicada ainda."
-                    : `${sorted.length} avaliações exibidas (priorizando 5 estrelas).`}
-            </div>
-
+                    : `${sorted.length} avaliações exibidas.`}
+              </div>
+  
             <div className="hidden items-center gap-2 sm:flex">
               <button
                 type="button"
