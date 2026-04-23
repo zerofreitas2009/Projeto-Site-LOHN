@@ -9,6 +9,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({
   className = "",
   variant = "primary",
+  children,
   ...props
 }: ButtonProps) {
   const base =
@@ -20,5 +21,9 @@ export default function Button({
       "border border-lohn-dark/30 text-lohn-dark hover:bg-lohn-dark/5 hover:border-lohn-dark/45",
   };
 
-  return <button className={`${base} ${variants[variant]} ${className}`} {...props} />;
+  return (
+    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
+      {children}
+    </button>
+  );
 }
