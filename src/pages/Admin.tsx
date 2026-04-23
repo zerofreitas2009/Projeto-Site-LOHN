@@ -24,7 +24,7 @@ function Stars({ rating }: { rating: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`h-4 w-4 ${i < full ? "fill-gold text-gold" : "text-neutral-300"}`}
+          className={`h-4 w-4 ${i < full ? "fill-lohn-accent text-lohn-accent" : "text-lohn-ink/20"}`}
         />
       ))}
     </div>
@@ -91,14 +91,14 @@ export default function Admin() {
   };
 
   return (
-    <div className="min-h-dvh bg-white text-neutral-900">
+    <div className="min-h-dvh bg-lohn-light text-lohn-ink">
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
+            <h1 className="text-2xl font-semibold tracking-tight text-lohn-ink">
               Moderação de avaliações
             </h1>
-            <p className="mt-2 text-sm text-neutral-600">
+            <p className="mt-2 text-sm text-lohn-ink/70">
               Aprovar (publicar) ou remover avaliações enviadas pelo formulário.
             </p>
           </div>
@@ -125,8 +125,8 @@ export default function Admin() {
           </div>
         ) : null}
 
-        <div className="mt-8 rounded-2xl border border-gold/15 bg-white p-4 shadow-sm">
-          <div className="text-sm text-neutral-700">
+        <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/40 p-4 shadow-sm backdrop-blur">
+          <div className="text-sm text-lohn-ink/80">
             {status === "loading" ? "Carregando..." : `${rows.length} registros`}
           </div>
 
@@ -134,15 +134,15 @@ export default function Admin() {
             {rows.map((r) => (
               <div
                 key={r.id}
-                className="rounded-xl border border-gold/15 bg-white p-4 shadow-sm"
+                className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4 shadow-sm"
               >
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <div className="text-sm font-semibold text-neutral-900">{r.name}</div>
+                      <div className="text-sm font-semibold text-lohn-ink">{r.name}</div>
                       <Stars rating={r.rating} />
                       {r.service ? (
-                        <span className="rounded-full border border-gold/20 bg-gold/5 px-2 py-0.5 text-xs text-neutral-700">
+                        <span className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-2 py-0.5 text-xs text-lohn-ink/80">
                           {r.service}
                         </span>
                       ) : null}
@@ -150,16 +150,16 @@ export default function Admin() {
                         className={`rounded-full px-2 py-0.5 text-xs ${
                           r.approved
                             ? "bg-emerald-600/10 text-emerald-800"
-                            : "bg-amber-500/10 text-amber-800"
+                            : "bg-amber-500/10 text-amber-900"
                         }`}
                       >
                         {r.approved ? "Publicado" : "Pendente"}
                       </span>
                     </div>
-                    <div className="mt-1 text-xs text-neutral-500">
+                    <div className="mt-1 text-xs text-lohn-ink/60">
                       {new Date(r.created_at).toLocaleString("pt-BR")}
                     </div>
-                    <div className="mt-3 text-sm leading-relaxed text-neutral-700">
+                    <div className="mt-3 text-sm leading-relaxed text-lohn-ink/80">
                       {r.comment}
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export default function Admin() {
             ))}
 
             {rows.length === 0 && status !== "loading" ? (
-              <div className="rounded-xl border border-gold/15 bg-white p-6 text-sm text-neutral-600">
+              <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 text-sm text-lohn-ink/70">
                 Nenhuma avaliação encontrada.
               </div>
             ) : null}

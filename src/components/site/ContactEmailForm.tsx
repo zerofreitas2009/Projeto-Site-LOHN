@@ -42,7 +42,7 @@ export default function ContactEmailForm() {
   });
 
   const inputClass =
-    "w-full rounded-md border border-gold/20 bg-white px-3 py-2 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-gold/50";
+    "w-full rounded-md border border-lohn-dark/20 bg-lohn-light/40 px-3 py-2 text-sm text-lohn-ink outline-none placeholder:text-lohn-ink/40 focus:border-lohn-dark/40";
 
   return (
     <form
@@ -92,7 +92,7 @@ export default function ContactEmailForm() {
       }}
     >
       <div className="space-y-1">
-        <label className="text-xs text-neutral-700" htmlFor="contact-name">
+        <label className="text-xs text-lohn-ink/80" htmlFor="contact-name">
           Nome*
         </label>
         <input
@@ -106,7 +106,7 @@ export default function ContactEmailForm() {
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-700" htmlFor="contact-phone">
+        <label className="text-xs text-lohn-ink/80" htmlFor="contact-phone">
           Telefone*
         </label>
         <input
@@ -123,7 +123,7 @@ export default function ContactEmailForm() {
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-700" htmlFor="contact-subject">
+        <label className="text-xs text-lohn-ink/80" htmlFor="contact-subject">
           Assunto*
         </label>
         <input
@@ -137,7 +137,7 @@ export default function ContactEmailForm() {
       </div>
 
       <div className="space-y-1">
-        <label className="text-xs text-neutral-700" htmlFor="contact-message">
+        <label className="text-xs text-lohn-ink/80" htmlFor="contact-message">
           Mensagem
         </label>
         <textarea

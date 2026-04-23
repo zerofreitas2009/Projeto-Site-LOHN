@@ -4,9 +4,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        gold: {
-          DEFAULT: "#D4AF37",
-          soft: "#E5C76B",
+        lohn: {
+          // Marrom escuro (primeiro frame)
+          dark: "#5A3A2F",
+          // Marrom claro (restante do site)
+          light: "#F4E7DD",
+          // Cor principal de texto sobre o fundo claro
+          ink: "#2D1B14",
+          // Tom intermediário para detalhes/hover
+          accent: "#8A614E",
         },
       },
     },

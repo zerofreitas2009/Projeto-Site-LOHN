@@ -115,11 +115,11 @@ export default function ServicesSection() {
     <section id="servicos" className="scroll-mt-24">
       <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
         <div>
-          <p className="text-xs font-medium tracking-[0.22em] text-gold/80">SERVIÇOS</p>
-          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-gold sm:text-3xl">
+          <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">SERVIÇOS</p>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-lohn-ink sm:text-3xl">
             Áreas de atuação
           </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-neutral-700">
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-lohn-ink/80">
             Serviços organizados por área para facilitar a visualização.
           </p>
         </div>
@@ -128,10 +128,12 @@ export default function ServicesSection() {
           {groups.map((group) => (
             <div key={group.title}>
               <div className="flex items-center gap-3">
-                <div className="rounded-lg border border-gold/15 bg-white p-2 shadow-sm">
-                  <group.icon className="h-4 w-4 text-gold" />
+                <div className="rounded-lg border border-lohn-dark/15 bg-lohn-light/30 p-2 shadow-sm">
+                  <group.icon className="h-4 w-4 text-lohn-accent" />
                 </div>
-                <h3 className="text-lg font-semibold tracking-tight text-gold">{group.title}</h3>
+                <h3 className="text-lg font-semibold tracking-tight text-lohn-ink">
+                  {group.title}
+                </h3>
               </div>
 
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -146,14 +148,14 @@ export default function ServicesSection() {
           ))}
         </div>
 
-        <div className="mt-10 rounded-xl border border-gold/15 bg-white p-5 shadow-sm">
+        <div className="mt-10 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-5 shadow-sm backdrop-blur">
           <div className="flex items-start gap-3">
-            <div className="mt-0.5 rounded-lg border border-gold/15 bg-white p-2 shadow-sm">
-              <Briefcase className="h-4 w-4 text-gold" />
+            <div className="mt-0.5 rounded-lg border border-lohn-dark/15 bg-lohn-light/30 p-2 shadow-sm">
+              <Briefcase className="h-4 w-4 text-lohn-accent" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-gold">Atendimento 24h</div>
-              <div className="mt-1 text-sm text-neutral-700">
+              <div className="text-sm font-semibold text-lohn-ink">Atendimento 24h</div>
+              <div className="mt-1 text-sm text-lohn-ink/75">
                 Para urgências, fale diretamente pelo WhatsApp.
               </div>
             </div>

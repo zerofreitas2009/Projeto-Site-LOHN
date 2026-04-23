@@ -7,16 +7,16 @@ export default function AboutSection() {
         {/* Sobre */}
         <div className="grid gap-10 md:grid-cols-2">
           <div>
-            <p className="text-xs font-medium tracking-[0.22em] text-gold/80">SOBRE</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-gold sm:text-3xl">
+            <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">SOBRE</p>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight text-lohn-ink sm:text-3xl">
               Atendimento humanizado, com foco em resultado
             </h2>
-            <p className="mt-4 leading-relaxed text-neutral-700">
+            <p className="mt-4 leading-relaxed text-lohn-ink/80">
               Atuamos com seriedade e discrição, oferecendo orientação jurídica com clareza
               e responsabilidade. O objetivo é construir a melhor estratégia para cada caso,
               com acompanhamento próximo e comunicação objetiva.
             </p>
-            <p className="mt-4 leading-relaxed text-neutral-600">
+            <p className="mt-4 leading-relaxed text-lohn-ink/65">
               (Observação: os textos finais desta seção serão ajustados conforme o conteúdo
               do documento anexado.)
             </p>

@@ -15,16 +15,16 @@ export default function Login() {
   }, [loading, navigate, session]);
 
   return (
-    <div className="min-h-dvh bg-white text-neutral-900">
+    <div className="min-h-dvh bg-lohn-light text-lohn-ink">
       <div className="mx-auto w-full max-w-md px-4 py-14">
-        <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
+        <h1 className="text-2xl font-semibold tracking-tight text-lohn-ink">
           Acesso administrativo
         </h1>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-lohn-ink/70">
           Entre para aprovar ou remover avaliações enviadas pelo site.
         </p>
 
-        <div className="mt-8 rounded-2xl border border-gold/15 bg-white p-4 shadow-sm">
+        <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/40 p-4 shadow-sm backdrop-blur">
           <Auth
             supabaseClient={supabase}
             providers={[]}

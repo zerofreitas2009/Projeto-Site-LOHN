@@ -8,7 +8,7 @@ import SiteReviewsSection from "../components/site/SiteReviewsSection";
 
 export default function Index() {
   return (
-    <div className="min-h-dvh bg-white text-neutral-900">
+    <div className="min-h-dvh bg-lohn-light text-lohn-ink">
       <SiteHeader />
       <main>
         <HeroSection />
