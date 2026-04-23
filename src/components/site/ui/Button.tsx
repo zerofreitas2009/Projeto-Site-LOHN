@@ -1,6 +1,6 @@
 import * as React from "react";
 
-type Variant = "primary" | "outline";
+type Variant = "primary" | "outline" | "light";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;
@@ -17,6 +17,7 @@ export default function Button({
 
   const variants: Record<Variant, string> = {
     primary: "bg-lohn-dark text-lohn-light hover:bg-lohn-dark/90",
+    light: "bg-lohn-light text-lohn-dark hover:bg-lohn-light/90",
     outline:
       "border border-lohn-dark/30 text-lohn-dark hover:bg-lohn-dark/5 hover:border-lohn-dark/45",
   };

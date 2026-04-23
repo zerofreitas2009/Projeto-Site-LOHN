@@ -25,9 +25,7 @@ export default function HeroSection() {
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link to="/contato">
-                <Button className="bg-lohn-light text-lohn-dark hover:bg-lohn-light/90">
-                  Agendar atendimento
-                </Button>
+                <Button variant="light">Agendar atendimento</Button>
               </Link>
               <a href="#servicos">
                 <Button
