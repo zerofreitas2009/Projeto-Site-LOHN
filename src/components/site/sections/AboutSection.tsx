@@ -16,10 +16,6 @@ export default function AboutSection() {
               e responsabilidade. O objetivo é construir a melhor estratégia para cada caso,
               com acompanhamento próximo e comunicação objetiva.
             </p>
-            <p className="mt-4 leading-relaxed text-lohn-ink/65">
-              (Observação: os textos finais desta seção serão ajustados conforme o conteúdo
-              do documento anexado.)
-            </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
