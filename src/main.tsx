@@ -4,6 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { SessionProvider } from "./components/auth/SessionProvider";
+import { registerSW } from "virtual:pwa-register";
+
+registerSW({
+  immediate: true,
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
