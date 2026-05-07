@@ -110,7 +110,13 @@ export default function SiteHeader() {
             );
           })}
           <a href={whatsappHref} target="_blank" rel="noreferrer">
-            <Button variant="outline">WhatsApp</Button>
+            <Button
+              variant="outline"
+              trackingId="whatsapp_header_desktop"
+              trackingLabel="WhatsApp (Header Desktop)"
+            >
+              WhatsApp
+            </Button>
           </a>
         </nav>
 
@@ -190,7 +196,13 @@ export default function SiteHeader() {
                 );
               })}
               <a href={whatsappHref} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
-                <Button className="w-full">WhatsApp</Button>
+                <Button
+                  className="w-full"
+                  trackingId="whatsapp_header_mobile"
+                  trackingLabel="WhatsApp (Header Mobile)"
+                >
+                  WhatsApp
+                </Button>
               </a>
             </div>
           </div>

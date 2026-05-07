@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { MessageCircle, X } from "lucide-react";
+import { logSiteLohnEvent } from "../../lib/siteLohnTagging";
 
 const WHATSAPP_NUMBER = "5511913331559";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -47,6 +48,14 @@ export default function WhatsAppFloatingButton() {
             href={href}
             target="_blank"
             rel="noreferrer"
+            onClick={() => {
+              logSiteLohnEvent({
+                event_type: "button_click",
+                page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+                button_id: "whatsapp_floating_start",
+                button_label: "WhatsApp - Iniciar conversa",
+              });
+            }}
             className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-md bg-lohn-light px-4 py-2 text-sm font-medium text-lohn-dark transition hover:bg-lohn-light/90"
           >
             <MessageCircle className="h-4 w-4" />
@@ -57,7 +66,16 @@ export default function WhatsAppFloatingButton() {
 
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          logSiteLohnEvent({
+            event_type: "button_click",
+            page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+            button_id: "whatsapp_floating_toggle",
+            button_label: next ? "WhatsApp - Abrir" : "WhatsApp - Fechar",
+          });
+        }}
         className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-lohn-light/25 bg-lohn-dark/90 text-lohn-light shadow-[0_18px_45px_rgba(0,0,0,0.35)] backdrop-blur transition hover:bg-lohn-dark"
         aria-label={open ? "Fechar WhatsApp" : "Abrir WhatsApp"}
       >

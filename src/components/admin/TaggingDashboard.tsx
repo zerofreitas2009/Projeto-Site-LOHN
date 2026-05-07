@@ -5,11 +5,13 @@ import Button from "../site/ui/Button";
 type TagEventRow = {
   id: string;
   created_at: string;
-  event_type: "page_view" | "button_click";
+  event_type: "page_view" | "button_click" | "page_duration";
   page_path: string | null;
   button_id: string | null;
   button_label: string | null;
   session_id: string | null;
+  duration_ms: number | null;
+  device_type: string | null;
 };
 
 function isoDateInput(d: Date) {
@@ -17,6 +19,13 @@ function isoDateInput(d: Date) {
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function formatDuration(ms: number) {
+  const totalSec = Math.round(ms / 1000);
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return min > 0 ? `${min}m ${String(sec).padStart(2, "0")}s` : `${sec}s`;
 }
 
 export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
@@ -38,11 +47,13 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
 
     const { data, error } = await supabase
       .from("site_lohn_tag_events")
-      .select("id,created_at,event_type,page_path,button_id,button_label,session_id")
+      .select(
+        "id,created_at,event_type,page_path,button_id,button_label,session_id,duration_ms,device_type"
+      )
       .gte("created_at", from)
       .lte("created_at", to)
       .order("created_at", { ascending: false })
-      .limit(500);
+      .limit(1000);
 
     if (error) {
       console.error("[site-lohn] admin load tag events", error);
@@ -59,6 +70,14 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
     const pageViews = rows.filter((r) => r.event_type === "page_view").length;
     const clicks = rows.filter((r) => r.event_type === "button_click").length;
 
+    const durations = rows
+      .filter((r) => r.event_type === "page_duration" && typeof r.duration_ms === "number")
+      .map((r) => r.duration_ms as number);
+
+    const avgDurationMs = durations.length
+      ? Math.round(durations.reduce((a, b) => a + b, 0) / durations.length)
+      : null;
+
     const byButton = new Map<string, number>();
     for (const r of rows) {
       if (r.event_type !== "button_click") continue;
@@ -70,7 +89,16 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 8);
 
-    return { total, pageViews, clicks, topButtons };
+    const byDevice = new Map<string, number>();
+    for (const r of rows) {
+      if (r.event_type !== "page_view") continue;
+      const key = r.device_type || "desconhecido";
+      byDevice.set(key, (byDevice.get(key) ?? 0) + 1);
+    }
+
+    const deviceBreakdown = Array.from(byDevice.entries()).sort((a, b) => b[1] - a[1]);
+
+    return { total, pageViews, clicks, avgDurationMs, topButtons, deviceBreakdown };
   }, [rows]);
 
   return (
@@ -79,7 +107,7 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
         <div>
           <div className="text-sm font-semibold text-lohn-ink">Tagueamento (acessos e cliques)</div>
           <div className="mt-1 text-xs text-lohn-ink/60">
-            Mostrando até 500 eventos no período selecionado.
+            Mostrando até 1000 eventos no período selecionado.
           </div>
         </div>
 
@@ -108,7 +136,7 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
         </div>
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+      <div className="mt-4 grid gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
           <div className="text-xs text-lohn-ink/60">Total</div>
           <div className="mt-1 text-2xl font-semibold text-lohn-ink">{summary.total}</div>
@@ -121,7 +149,29 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
           <div className="text-xs text-lohn-ink/60">Cliques (button_click)</div>
           <div className="mt-1 text-2xl font-semibold text-lohn-ink">{summary.clicks}</div>
         </div>
+        <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-xs text-lohn-ink/60">Tempo médio na página</div>
+          <div className="mt-1 text-2xl font-semibold text-lohn-ink">
+            {summary.avgDurationMs ? formatDuration(summary.avgDurationMs) : "-"}
+          </div>
+        </div>
       </div>
+
+      {summary.deviceBreakdown.length > 0 ? (
+        <div className="mt-4 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-sm font-semibold text-lohn-ink">Dispositivos (por acessos)</div>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {summary.deviceBreakdown.map(([device, count]) => (
+              <span
+                key={device}
+                className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-3 py-1 text-xs text-lohn-ink/80"
+              >
+                {device}: {count}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {summary.topButtons.length > 0 ? (
         <div className="mt-4 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
@@ -155,10 +205,13 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
                   Página
                 </th>
                 <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
-                  Botão
+                  Ação
                 </th>
                 <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
-                  Sessão
+                  Duração
+                </th>
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Dispositivo
                 </th>
               </tr>
             </thead>
@@ -177,17 +230,22 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
                   <td className="px-4 py-3 text-lohn-ink/80">
                     {r.event_type === "button_click"
                       ? r.button_label || r.button_id || "-"
-                      : "-"}
+                      : r.event_type === "page_duration"
+                        ? "Tempo na página"
+                        : "-"}
                   </td>
                   <td className="px-4 py-3 text-lohn-ink/70">
-                    {r.session_id ? r.session_id.slice(0, 8) : "-"}
+                    {r.event_type === "page_duration" && typeof r.duration_ms === "number"
+                      ? formatDuration(r.duration_ms)
+                      : "-"}
                   </td>
+                  <td className="px-4 py-3 text-lohn-ink/70">{r.device_type ?? "-"}</td>
                 </tr>
               ))}
 
               {rows.length === 0 && status !== "loading" ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-lohn-ink/70">
+                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-lohn-ink/70">
                     Nenhum evento encontrado para o período.
                   </td>
                 </tr>

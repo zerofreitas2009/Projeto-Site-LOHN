@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Button from "./ui/Button";
+import { logSiteLohnEvent } from "../../lib/siteLohnTagging";
 
 const WHATSAPP_NUMBER = "5511913331559";
 const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -29,6 +30,14 @@ export default function SiteFooter() {
                   )}`}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() => {
+                    logSiteLohnEvent({
+                      event_type: "button_click",
+                      page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+                      button_id: "whatsapp_footer_link",
+                      button_label: "WhatsApp (Footer)",
+                    });
+                  }}
                 >
                   (11) 91333-1559
                 </a>
@@ -47,7 +56,9 @@ export default function SiteFooter() {
 
           <div className="md:justify-self-end">
             <Link to="/contato" className="inline-flex w-full md:w-auto">
-              <Button className="w-full md:w-auto">Ir para contato</Button>
+              <Button className="w-full md:w-auto" trackingId="footer_ir_contato" trackingLabel="Ir para contato">
+                Ir para contato
+              </Button>
             </Link>
             <p className="mt-3 text-xs text-lohn-ink/60">
               Formulário de e-mail disponível na página de contato.

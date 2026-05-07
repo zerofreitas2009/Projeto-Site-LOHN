@@ -1,6 +1,6 @@
 import { supabase } from "../integrations/supabase/client";
 
-export type SiteLohnEventType = "page_view" | "button_click";
+export type SiteLohnEventType = "page_view" | "button_click" | "page_duration";
 
 type EventInsert = {
   event_type: SiteLohnEventType;
@@ -10,6 +10,8 @@ type EventInsert = {
   session_id?: string | null;
   referrer?: string | null;
   user_agent?: string | null;
+  device_type?: string | null;
+  duration_ms?: number | null;
   meta?: Record<string, unknown>;
 };
 
@@ -27,6 +29,13 @@ function getSessionId() {
   }
 }
 
+function detectDeviceType() {
+  const ua = navigator.userAgent;
+  if (/iPad|Tablet/i.test(ua)) return "tablet";
+  if (/Mobi|Android|iPhone|iPod|Windows Phone/i.test(ua)) return "mobile";
+  return "desktop";
+}
+
 export async function logSiteLohnEvent(input: EventInsert) {
   try {
     const session_id = getSessionId();
@@ -35,6 +44,7 @@ export async function logSiteLohnEvent(input: EventInsert) {
       session_id,
       referrer: input.referrer ?? document.referrer ?? null,
       user_agent: input.user_agent ?? navigator.userAgent ?? null,
+      device_type: input.device_type ?? detectDeviceType(),
       meta: input.meta ?? {},
     };
 
