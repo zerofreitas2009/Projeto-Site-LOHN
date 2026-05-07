@@ -1,0 +1,207 @@
+import { useMemo, useState } from "react";
+import { supabase } from "../../integrations/supabase/client";
+import Button from "../site/ui/Button";
+
+type TagEventRow = {
+  id: string;
+  created_at: string;
+  event_type: "page_view" | "button_click";
+  page_path: string | null;
+  button_id: string | null;
+  button_label: string | null;
+  session_id: string | null;
+};
+
+function isoDateInput(d: Date) {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
+  const [fromDate, setFromDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() - 7);
+    return isoDateInput(d);
+  });
+  const [toDate, setToDate] = useState(() => isoDateInput(new Date()));
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [rows, setRows] = useState<TagEventRow[]>([]);
+
+  const load = async () => {
+    if (!isAdmin) return;
+    setStatus("loading");
+
+    const from = new Date(`${fromDate}T00:00:00.000Z`).toISOString();
+    const to = new Date(`${toDate}T23:59:59.999Z`).toISOString();
+
+    const { data, error } = await supabase
+      .from("site_lohn_tag_events")
+      .select("id,created_at,event_type,page_path,button_id,button_label,session_id")
+      .gte("created_at", from)
+      .lte("created_at", to)
+      .order("created_at", { ascending: false })
+      .limit(500);
+
+    if (error) {
+      console.error("[site-lohn] admin load tag events", error);
+      setStatus("error");
+      return;
+    }
+
+    setRows((data ?? []) as TagEventRow[]);
+    setStatus("idle");
+  };
+
+  const summary = useMemo(() => {
+    const total = rows.length;
+    const pageViews = rows.filter((r) => r.event_type === "page_view").length;
+    const clicks = rows.filter((r) => r.event_type === "button_click").length;
+
+    const byButton = new Map<string, number>();
+    for (const r of rows) {
+      if (r.event_type !== "button_click") continue;
+      const key = r.button_label || r.button_id || "(sem id)";
+      byButton.set(key, (byButton.get(key) ?? 0) + 1);
+    }
+
+    const topButtons = Array.from(byButton.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+
+    return { total, pageViews, clicks, topButtons };
+  }, [rows]);
+
+  return (
+    <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/40 p-4 shadow-sm backdrop-blur">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div className="text-sm font-semibold text-lohn-ink">Tagueamento (acessos e cliques)</div>
+          <div className="mt-1 text-xs text-lohn-ink/60">
+            Mostrando até 500 eventos no período selecionado.
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+          <label className="grid gap-1 text-xs text-lohn-ink/70">
+            De
+            <input
+              type="date"
+              value={fromDate}
+              onChange={(e) => setFromDate(e.target.value)}
+              className="h-10 rounded-md border border-lohn-dark/20 bg-lohn-light/50 px-3 text-sm text-lohn-ink"
+            />
+          </label>
+          <label className="grid gap-1 text-xs text-lohn-ink/70">
+            Até
+            <input
+              type="date"
+              value={toDate}
+              onChange={(e) => setToDate(e.target.value)}
+              className="h-10 rounded-md border border-lohn-dark/20 bg-lohn-light/50 px-3 text-sm text-lohn-ink"
+            />
+          </label>
+          <Button variant="outline" onClick={() => load()} disabled={!isAdmin || status === "loading"}>
+            {status === "loading" ? "Carregando..." : "Filtrar"}
+          </Button>
+        </div>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-xs text-lohn-ink/60">Total</div>
+          <div className="mt-1 text-2xl font-semibold text-lohn-ink">{summary.total}</div>
+        </div>
+        <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-xs text-lohn-ink/60">Acessos (page_view)</div>
+          <div className="mt-1 text-2xl font-semibold text-lohn-ink">{summary.pageViews}</div>
+        </div>
+        <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-xs text-lohn-ink/60">Cliques (button_click)</div>
+          <div className="mt-1 text-2xl font-semibold text-lohn-ink">{summary.clicks}</div>
+        </div>
+      </div>
+
+      {summary.topButtons.length > 0 ? (
+        <div className="mt-4 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-sm font-semibold text-lohn-ink">Botões mais clicados</div>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {summary.topButtons.map(([label, count]) => (
+              <div
+                key={label}
+                className="flex items-center justify-between rounded-lg border border-lohn-dark/10 bg-lohn-light/30 px-3 py-2"
+              >
+                <div className="text-sm text-lohn-ink/80">{label}</div>
+                <div className="text-sm font-semibold text-lohn-ink">{count}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      <div className="mt-4 overflow-hidden rounded-xl border border-lohn-dark/15">
+        <div className="max-h-[520px] overflow-auto bg-lohn-light/30">
+          <table className="w-full text-left text-sm">
+            <thead className="sticky top-0 bg-lohn-light">
+              <tr className="border-b border-lohn-dark/15">
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Data/hora
+                </th>
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Tipo
+                </th>
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Página
+                </th>
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Botão
+                </th>
+                <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
+                  Sessão
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} className="border-b border-lohn-dark/10">
+                  <td className="px-4 py-3 text-lohn-ink/80">
+                    {new Date(r.created_at).toLocaleString("pt-BR")}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-2 py-0.5 text-xs text-lohn-ink/80">
+                      {r.event_type}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-lohn-ink/80">{r.page_path ?? "-"}</td>
+                  <td className="px-4 py-3 text-lohn-ink/80">
+                    {r.event_type === "button_click"
+                      ? r.button_label || r.button_id || "-"
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-3 text-lohn-ink/70">
+                    {r.session_id ? r.session_id.slice(0, 8) : "-"}
+                  </td>
+                </tr>
+              ))}
+
+              {rows.length === 0 && status !== "loading" ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-sm text-lohn-ink/70">
+                    Nenhum evento encontrado para o período.
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {status === "error" ? (
+        <div className="mt-4 rounded-xl border border-red-600/20 bg-red-600/10 p-4 text-sm text-red-800">
+          Não foi possível carregar os eventos. Verifique se você está logado como admin.
+        </div>
+      ) : null}
+    </div>
+  );
+}

@@ -4,6 +4,7 @@ import { supabase } from "../integrations/supabase/client";
 import { useSession } from "../components/auth/SessionProvider";
 import Button from "../components/site/ui/Button";
 import { Star } from "lucide-react";
+import TaggingDashboard from "../components/admin/TaggingDashboard";
 
 type ReviewRow = {
   id: string;
@@ -16,6 +17,8 @@ type ReviewRow = {
 };
 
 const ADMIN_EMAIL = "advocacialohn@gmail.com";
+
+type AdminView = "reviews" | "tagging";
 
 function Stars({ rating }: { rating: number }) {
   const full = Math.max(0, Math.min(5, Math.round(rating)));
@@ -34,6 +37,8 @@ function Stars({ rating }: { rating: number }) {
 export default function Admin() {
   const { session, loading } = useSession();
   const navigate = useNavigate();
+
+  const [view, setView] = useState<AdminView>("reviews");
 
   const [rows, setRows] = useState<ReviewRow[]>([]);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
@@ -95,17 +100,26 @@ export default function Admin() {
       <div className="mx-auto w-full max-w-6xl px-4 py-14">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-lohn-ink">
-              Moderação de avaliações
-            </h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-lohn-ink">Admin</h1>
             <p className="mt-2 text-sm text-lohn-ink/70">
-              Aprovar (publicar) ou remover avaliações enviadas pelo formulário.
+              Moderação de avaliações e relatório de tagueamento.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={() => load()} disabled={!isAdmin}>
-              Atualizar
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              variant={view === "reviews" ? "primary" : "outline"}
+              onClick={() => setView("reviews")}
+              disabled={!isAdmin}
+            >
+              Avaliações
+            </Button>
+            <Button
+              variant={view === "tagging" ? "primary" : "outline"}
+              onClick={() => setView("tagging")}
+              disabled={!isAdmin}
+            >
+              Tagueamento
             </Button>
             <Button
               variant="outline"
@@ -121,82 +135,87 @@ export default function Admin() {
 
         {!loading && session && !isAdmin ? (
           <div className="mt-8 rounded-2xl border border-red-600/20 bg-red-600/10 p-4 text-sm text-red-800">
-            Sua conta não possui permissão para moderar avaliações.
+            Sua conta não possui permissão para acessar a área admin.
           </div>
         ) : null}
 
-        <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/40 p-4 shadow-sm backdrop-blur">
-          <div className="text-sm text-lohn-ink/80">
-            {status === "loading" ? "Carregando..." : `${rows.length} registros`}
-          </div>
+        {view === "tagging" ? (
+          <TaggingDashboard isAdmin={isAdmin} />
+        ) : (
+          <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/40 p-4 shadow-sm backdrop-blur">
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-sm text-lohn-ink/80">
+                {status === "loading" ? "Carregando..." : `${rows.length} registros`}
+              </div>
+              <Button variant="outline" onClick={() => load()} disabled={!isAdmin}>
+                Atualizar
+              </Button>
+            </div>
 
-          <div className="mt-4 space-y-3">
-            {rows.map((r) => (
-              <div
-                key={r.id}
-                className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4 shadow-sm"
-              >
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <div className="text-sm font-semibold text-lohn-ink">{r.name}</div>
-                      <Stars rating={r.rating} />
-                      {r.service ? (
-                        <span className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-2 py-0.5 text-xs text-lohn-ink/80">
-                          {r.service}
+            <div className="mt-4 space-y-3">
+              {rows.map((r) => (
+                <div
+                  key={r.id}
+                  className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4 shadow-sm"
+                >
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <div className="text-sm font-semibold text-lohn-ink">{r.name}</div>
+                        <Stars rating={r.rating} />
+                        {r.service ? (
+                          <span className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-2 py-0.5 text-xs text-lohn-ink/80">
+                            {r.service}
+                          </span>
+                        ) : null}
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs ${
+                            r.approved
+                              ? "bg-emerald-600/10 text-emerald-800"
+                              : "bg-amber-500/10 text-amber-900"
+                          }`}
+                        >
+                          {r.approved ? "Publicado" : "Pendente"}
                         </span>
-                      ) : null}
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs ${
-                          r.approved
-                            ? "bg-emerald-600/10 text-emerald-800"
-                            : "bg-amber-500/10 text-amber-900"
-                        }`}
-                      >
-                        {r.approved ? "Publicado" : "Pendente"}
-                      </span>
+                      </div>
+                      <div className="mt-1 text-xs text-lohn-ink/60">
+                        {new Date(r.created_at).toLocaleString("pt-BR")}
+                      </div>
+                      <div className="mt-3 text-sm leading-relaxed text-lohn-ink/80">
+                        {r.comment}
+                      </div>
                     </div>
-                    <div className="mt-1 text-xs text-lohn-ink/60">
-                      {new Date(r.created_at).toLocaleString("pt-BR")}
-                    </div>
-                    <div className="mt-3 text-sm leading-relaxed text-lohn-ink/80">
-                      {r.comment}
-                    </div>
-                  </div>
 
-                  <div className="flex shrink-0 items-center gap-2">
-                    {r.approved ? (
-                      <Button
-                        variant="outline"
-                        onClick={() => approve(r.id, false)}
-                        disabled={!isAdmin}
-                      >
-                        Despublicar
+                    <div className="flex shrink-0 items-center gap-2">
+                      {r.approved ? (
+                        <Button
+                          variant="outline"
+                          onClick={() => approve(r.id, false)}
+                          disabled={!isAdmin}
+                        >
+                          Despublicar
+                        </Button>
+                      ) : (
+                        <Button onClick={() => approve(r.id, true)} disabled={!isAdmin}>
+                          Aprovar
+                        </Button>
+                      )}
+                      <Button variant="outline" onClick={() => remove(r.id)} disabled={!isAdmin}>
+                        Remover
                       </Button>
-                    ) : (
-                      <Button onClick={() => approve(r.id, true)} disabled={!isAdmin}>
-                        Aprovar
-                      </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      onClick={() => remove(r.id)}
-                      disabled={!isAdmin}
-                    >
-                      Remover
-                    </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
 
-            {rows.length === 0 && status !== "loading" ? (
-              <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 text-sm text-lohn-ink/70">
-                Nenhuma avaliação encontrada.
-              </div>
-            ) : null}
+              {rows.length === 0 && status !== "loading" ? (
+                <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 text-sm text-lohn-ink/70">
+                  Nenhuma avaliação encontrada.
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

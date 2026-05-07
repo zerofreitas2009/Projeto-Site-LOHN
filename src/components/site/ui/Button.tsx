@@ -1,15 +1,21 @@
 import * as React from "react";
+import { logSiteLohnEvent } from "../../../lib/siteLohnTagging";
 
 type Variant = "primary" | "outline" | "light";
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;
+  trackingId?: string;
+  trackingLabel?: string;
 };
 
 export default function Button({
   className = "",
   variant = "primary",
   children,
+  trackingId,
+  trackingLabel,
+  onClick,
   ...props
 }: ButtonProps) {
   const base =
@@ -23,7 +29,22 @@ export default function Button({
   };
 
   return (
-    <button className={`${base} ${variants[variant]} ${className}`} {...props}>
+    <button
+      className={`${base} ${variants[variant]} ${className}`}
+      onClick={(e) => {
+        if (trackingId || trackingLabel) {
+          logSiteLohnEvent({
+            event_type: "button_click",
+            page_path: `${window.location.pathname}${window.location.search}${window.location.hash}`,
+            button_id: trackingId ?? null,
+            button_label: trackingLabel ?? null,
+          });
+        }
+
+        onClick?.(e);
+      }}
+      {...props}
+    >
       {children}
     </button>
   );
