@@ -6,6 +6,10 @@ import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import { logSiteLohnEvent } from "./lib/siteLohnTagging";
 
+function isExcludedPath(path: string) {
+  return path.startsWith("/admin");
+}
+
 function AnalyticsListener() {
   const location = useLocation();
   const currentPathRef = useRef<string | null>(null);
@@ -32,30 +36,39 @@ function AnalyticsListener() {
     }
 
     activeMsRef.current = 0;
-    startedAtRef.current = document.visibilityState === "visible" ? now : null;
+    startedAtRef.current = null;
   };
 
   useEffect(() => {
     const now = Date.now();
 
+    // Flush duration for the previous tracked page (if any)
     if (currentPathRef.current) {
       flushDuration(now, "route_change");
-    } else {
-      startedAtRef.current = document.visibilityState === "visible" ? now : null;
+    }
+
+    if (isExcludedPath(location.pathname)) {
+      currentPathRef.current = null;
+      startedAtRef.current = null;
+      activeMsRef.current = 0;
+      return;
     }
 
     currentPathRef.current = path;
+    startedAtRef.current = document.visibilityState === "visible" ? now : null;
 
     logSiteLohnEvent({
       event_type: "page_view",
       page_path: path,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path]);
+  }, [path, location.pathname]);
 
   useEffect(() => {
     const onVisibilityChange = () => {
       const now = Date.now();
+      if (!currentPathRef.current) return;
+
       if (document.visibilityState === "hidden") {
         if (startedAtRef.current) {
           activeMsRef.current += now - startedAtRef.current;
@@ -67,6 +80,7 @@ function AnalyticsListener() {
     };
 
     const onPageHide = () => {
+      if (!currentPathRef.current) return;
       flushDuration(Date.now(), "page_hide");
     };
 

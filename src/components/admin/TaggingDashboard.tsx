@@ -12,6 +12,7 @@ type TagEventRow = {
   session_id: string | null;
   duration_ms: number | null;
   device_type: string | null;
+  platform: string | null;
 };
 
 function isoDateInput(d: Date) {
@@ -26,6 +27,28 @@ function formatDuration(ms: number) {
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
   return min > 0 ? `${min}m ${String(sec).padStart(2, "0")}s` : `${sec}s`;
+}
+
+function PlatformBarChart({ items }: { items: Array<{ label: string; value: number }> }) {
+  const max = Math.max(1, ...items.map((i) => i.value));
+  return (
+    <div className="mt-2 grid gap-2">
+      {items.map((i) => (
+        <div key={i.label} className="grid gap-1">
+          <div className="flex items-center justify-between text-xs text-lohn-ink/70">
+            <span>{i.label}</span>
+            <span className="font-medium text-lohn-ink">{i.value}</span>
+          </div>
+          <div className="h-2 w-full rounded-full bg-lohn-dark/10">
+            <div
+              className="h-2 rounded-full bg-lohn-accent"
+              style={{ width: `${Math.round((i.value / max) * 100)}%` }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
@@ -48,10 +71,11 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
     const { data, error } = await supabase
       .from("site_lohn_tag_events")
       .select(
-        "id,created_at,event_type,page_path,button_id,button_label,session_id,duration_ms,device_type"
+        "id,created_at,event_type,page_path,button_id,button_label,session_id,duration_ms,device_type,platform"
       )
       .gte("created_at", from)
       .lte("created_at", to)
+      .not("page_path", "ilike", "/admin%")
       .order("created_at", { ascending: false })
       .limit(1000);
 
@@ -98,7 +122,34 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
 
     const deviceBreakdown = Array.from(byDevice.entries()).sort((a, b) => b[1] - a[1]);
 
-    return { total, pageViews, clicks, avgDurationMs, topButtons, deviceBreakdown };
+    const byPlatform = new Map<string, number>([
+      ["iOS", 0],
+      ["Android", 0],
+      ["Site", 0],
+    ]);
+
+    for (const r of rows) {
+      if (r.event_type !== "page_view") continue;
+      if (r.platform === "ios") byPlatform.set("iOS", (byPlatform.get("iOS") ?? 0) + 1);
+      else if (r.platform === "android")
+        byPlatform.set("Android", (byPlatform.get("Android") ?? 0) + 1);
+      else byPlatform.set("Site", (byPlatform.get("Site") ?? 0) + 1);
+    }
+
+    const platformChart = Array.from(byPlatform.entries()).map(([label, value]) => ({
+      label,
+      value,
+    }));
+
+    return {
+      total,
+      pageViews,
+      clicks,
+      avgDurationMs,
+      topButtons,
+      deviceBreakdown,
+      platformChart,
+    };
   }, [rows]);
 
   return (
@@ -107,7 +158,7 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
         <div>
           <div className="text-sm font-semibold text-lohn-ink">Tagueamento (acessos e cliques)</div>
           <div className="mt-1 text-xs text-lohn-ink/60">
-            Mostrando até 1000 eventos no período selecionado.
+            Mostrando até 1000 eventos no período selecionado (exclui /admin).
           </div>
         </div>
 
@@ -157,21 +208,28 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
         </div>
       </div>
 
-      {summary.deviceBreakdown.length > 0 ? (
-        <div className="mt-4 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
-          <div className="text-sm font-semibold text-lohn-ink">Dispositivos (por acessos)</div>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {summary.deviceBreakdown.map(([device, count]) => (
-              <span
-                key={device}
-                className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-3 py-1 text-xs text-lohn-ink/80"
-              >
-                {device}: {count}
-              </span>
-            ))}
-          </div>
+      <div className="mt-4 grid gap-3 md:grid-cols-2">
+        <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+          <div className="text-sm font-semibold text-lohn-ink">Plataforma (iOS / Android / Site)</div>
+          <PlatformBarChart items={summary.platformChart} />
         </div>
-      ) : null}
+
+        {summary.deviceBreakdown.length > 0 ? (
+          <div className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
+            <div className="text-sm font-semibold text-lohn-ink">Dispositivo (por acessos)</div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {summary.deviceBreakdown.map(([device, count]) => (
+                <span
+                  key={device}
+                  className="rounded-full border border-lohn-dark/15 bg-lohn-light/30 px-3 py-1 text-xs text-lohn-ink/80"
+                >
+                  {device}: {count}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </div>
 
       {summary.topButtons.length > 0 ? (
         <div className="mt-4 rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-4">
@@ -211,7 +269,7 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
                   Duração
                 </th>
                 <th className="px-4 py-3 text-xs font-semibold tracking-wide text-lohn-ink/70">
-                  Dispositivo
+                  Plataforma
                 </th>
               </tr>
             </thead>
@@ -239,7 +297,9 @@ export default function TaggingDashboard({ isAdmin }: { isAdmin: boolean }) {
                       ? formatDuration(r.duration_ms)
                       : "-"}
                   </td>
-                  <td className="px-4 py-3 text-lohn-ink/70">{r.device_type ?? "-"}</td>
+                  <td className="px-4 py-3 text-lohn-ink/70">
+                    {r.platform === "ios" ? "iOS" : r.platform === "android" ? "Android" : "Site"}
+                  </td>
                 </tr>
               ))}
 

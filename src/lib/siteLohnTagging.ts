@@ -11,6 +11,7 @@ type EventInsert = {
   referrer?: string | null;
   user_agent?: string | null;
   device_type?: string | null;
+  platform?: string | null;
   duration_ms?: number | null;
   meta?: Record<string, unknown>;
 };
@@ -36,6 +37,13 @@ function detectDeviceType() {
   return "desktop";
 }
 
+function detectPlatform() {
+  const ua = navigator.userAgent;
+  if (/iPhone|iPad|iPod/i.test(ua)) return "ios";
+  if (/Android/i.test(ua)) return "android";
+  return "web";
+}
+
 export async function logSiteLohnEvent(input: EventInsert) {
   try {
     const session_id = getSessionId();
@@ -45,6 +53,7 @@ export async function logSiteLohnEvent(input: EventInsert) {
       referrer: input.referrer ?? document.referrer ?? null,
       user_agent: input.user_agent ?? navigator.userAgent ?? null,
       device_type: input.device_type ?? detectDeviceType(),
+      platform: input.platform ?? detectPlatform(),
       meta: input.meta ?? {},
     };
 
