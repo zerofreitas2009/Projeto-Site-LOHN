@@ -101,6 +101,29 @@ function AnalyticsListener() {
   return null;
 }
 
+function ScrollManager() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (isExcludedPath(location.pathname)) return;
+
+    const hash = location.hash?.replace("#", "");
+    if (hash) {
+      // Defer to ensure the next route has rendered its content.
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        else window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      });
+      return;
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.hash]);
+
+  return null;
+}
+
 function GlobalOverlays() {
   const location = useLocation();
   if (location.pathname.startsWith("/admin")) return null;
@@ -111,6 +134,7 @@ export default function App() {
   return (
     <>
       <AnalyticsListener />
+      <ScrollManager />
       <GlobalOverlays />
       <Routes>
         <Route path="/" element={<Index />} />
