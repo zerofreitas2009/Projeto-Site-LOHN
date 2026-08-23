@@ -109,17 +109,17 @@ function FaqItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-lohn-light/10">
+    <div className="border-b border-lohn-dark/15">
       <button
         type="button"
         onClick={onToggle}
         className="flex w-full items-center justify-between gap-4 py-5 text-left"
       >
-        <div className="text-base font-semibold text-lohn-light">{q}</div>
+        <div className="text-base font-semibold text-lohn-ink">{q}</div>
         <div className="text-lohn-accent">{open ? "−" : "+"}</div>
       </button>
       {open ? (
-        <p className="pb-5 text-sm leading-relaxed text-lohn-light/80">{a}</p>
+        <p className="pb-5 text-sm leading-relaxed text-lohn-ink/75">{a}</p>
       ) : null}
     </div>
   );
@@ -162,21 +162,21 @@ export default function Criminal() {
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
 
   return (
-    <div className="min-h-dvh bg-lohn-dark text-lohn-light">
+    <div className="min-h-dvh bg-lohn-light text-lohn-ink">
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(201,162,75,0.14),transparent_55%)]" />
+      <section className="relative overflow-hidden bg-lohn-dark">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(244,231,221,0.14),transparent_55%)]" />
         <div className="relative mx-auto w-full max-w-6xl px-4 py-16 md:py-24">
           <div className="max-w-3xl">
-            <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">
-              / ADVOCACIA CRIMINAL
+            <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/80">
+              ESPECIALISTAS EM DIREITO CRIMINAL
             </p>
             <h1 className="mt-4 text-4xl font-semibold tracking-tight text-lohn-light sm:text-5xl">
               Sua defesa criminal séria quando cada hora conta.
             </h1>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-lohn-light/80">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-lohn-light/85">
               Atuação imediata em flagrante, audiência de custódia, inquérito e processo — com
               estratégia desde a primeira diligência.
             </p>
@@ -196,7 +196,7 @@ export default function Criminal() {
                   variant="outline"
                   trackingId="criminal_cta_diagnostico"
                   trackingLabel="Criminal - Ir para diagnóstico"
-                  className="border-lohn-light/35 text-lohn-light hover:bg-lohn-light/10 hover:border-lohn-light/50"
+                  className="border-lohn-light/50 text-lohn-light hover:bg-lohn-light/10 hover:border-lohn-light/70"
                 >
                   Fazer diagnóstico
                 </Button>
@@ -207,27 +207,27 @@ export default function Criminal() {
       </section>
 
       {/* Perfil */}
-      <section className="border-y border-lohn-light/10 bg-black/20">
+      <section className="border-y border-lohn-dark/15 bg-lohn-light/40">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
           <div className="grid gap-10 lg:grid-cols-2 lg:items-start">
             <div className="max-w-xl">
-              <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">/ PERFIL</p>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+              <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">/ PERFIL</p>
+              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-ink">
                 Um escritório completo em defesa penal.
               </h2>
-              <p className="mt-4 text-sm leading-relaxed text-lohn-light/80">
+              <p className="mt-4 text-sm leading-relaxed text-lohn-ink/75">
                 Atuamos em todas as fases do processo criminal, da primeira diligência na delegacia ao
                 habeas corpus nos tribunais superiores. Cada caso é conduzido com estratégia, discrição
                 e total dedicação.
               </p>
-              <p className="mt-3 text-sm leading-relaxed text-lohn-light/80">
+              <p className="mt-3 text-sm leading-relaxed text-lohn-ink/75">
                 Aqui você não fala com uma secretária eletrônica. Você fala com quem vai assumir a sua
                 defesa e agir sem perder tempo.
               </p>
             </div>
 
             <div className="space-y-4">
-              <div className="overflow-hidden rounded-2xl border border-lohn-light/10 bg-[#0a0a0a]">
+              <div className="overflow-hidden rounded-2xl border border-lohn-dark/15 bg-lohn-light/30 shadow-sm">
                 <div
                   className="aspect-[4/5] w-full bg-cover bg-center"
                   style={{
@@ -241,7 +241,6 @@ export default function Criminal() {
                   <Button
                     trackingId="criminal_cta_whatsapp_perfil"
                     trackingLabel="Criminal - WhatsApp (Perfil)"
-                    className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
                   >
                     Falar agora no WhatsApp
                   </Button>
@@ -254,14 +253,12 @@ export default function Criminal() {
 
       {/* O que você está sentindo */}
       <section className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-        <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">
-          / O QUE VOCÊ ESTÁ SENTINDO
-        </p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+        <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">/ O QUE VOCÊ ESTÁ SENTINDO</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-ink">
           Se você está vivendo isso agora.
         </h2>
 
-        <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-lohn-light/10 bg-lohn-light/10 md:grid-cols-2">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
               ic: "◷",
@@ -284,26 +281,28 @@ export default function Criminal() {
               t: "Tenho medo de contratar errado, perder tempo e dinheiro, e o problema continuar.",
             },
           ].map((c) => (
-            <div key={c.t} className="bg-[#0a0a0a] p-7">
+            <div
+              key={c.t}
+              className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 shadow-sm"
+            >
               <div className="text-lohn-accent">{c.ic}</div>
-              <p className="mt-2 text-sm leading-relaxed text-lohn-light/80">“{c.t}”</p>
+              <p className="mt-3 text-sm leading-relaxed text-lohn-ink/75">“{c.t}”</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-10 text-center">
           <a href={whatsAppHref()} target="_blank" rel="noreferrer">
             <Button
               trackingId="criminal_cta_whatsapp_sentindo"
               trackingLabel="Criminal - WhatsApp (Sentindo)"
-              className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
             >
               Falar agora no WhatsApp
             </Button>
           </a>
         </div>
 
-        <p className="mx-auto mt-10 max-w-3xl text-center text-xl font-semibold leading-snug text-lohn-light">
+        <p className="mx-auto mt-10 max-w-3xl text-center text-xl font-semibold leading-snug text-lohn-ink">
           Em Direito Criminal, o erro mais caro é{" "}
           <span className="text-lohn-accent">esperar</span>. A diferença está em agir certo, desde o
           primeiro momento.
@@ -311,14 +310,14 @@ export default function Criminal() {
       </section>
 
       {/* Por que nós */}
-      <section className="border-y border-lohn-light/10 bg-black/20">
+      <section className="border-y border-lohn-dark/15 bg-lohn-light/40">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-          <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">/ POR QUE NÓS</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+          <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">/ POR QUE NÓS</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-ink">
             Defesa do primeiro contato à última instância.
           </h2>
 
-          <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-lohn-light/10 bg-lohn-light/10 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               {
                 n: "01",
@@ -341,20 +340,22 @@ export default function Criminal() {
                 d: "Diligências em delegacia e penitenciária quando o caso exige presença imediata.",
               },
             ].map((c) => (
-              <div key={c.n} className="bg-[#0a0a0a] p-7">
-                <div className="text-lohn-accent/60">{c.n}</div>
-                <div className="mt-2 text-lg font-semibold text-lohn-light">{c.t}</div>
-                <p className="mt-2 text-sm leading-relaxed text-lohn-light/80">{c.d}</p>
+              <div
+                key={c.n}
+                className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 shadow-sm"
+              >
+                <div className="text-lohn-accent/80">{c.n}</div>
+                <div className="mt-2 text-lg font-semibold text-lohn-ink">{c.t}</div>
+                <p className="mt-2 text-sm leading-relaxed text-lohn-ink/75">{c.d}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-10 text-center">
             <a href={whatsAppHref()} target="_blank" rel="noreferrer">
               <Button
                 trackingId="criminal_cta_whatsapp_porque"
                 trackingLabel="Criminal - WhatsApp (Por que nós)"
-                className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
               >
                 Falar agora no WhatsApp
               </Button>
@@ -364,36 +365,35 @@ export default function Criminal() {
       </section>
 
       {/* Diagnóstico */}
-      <section id="diagnostico" className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-        <div className="mx-auto max-w-2xl rounded-2xl border border-lohn-accent bg-[#0a0a0a] p-8 md:p-10">
-          <div className="text-xs font-semibold tracking-[0.22em] text-lohn-accent">
-            / DIAGNÓSTICO DE URGÊNCIA
-          </div>
-          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-lohn-light">
+      <section
+        id="diagnostico"
+        className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20 scroll-mt-24"
+      >
+        <div className="mx-auto max-w-3xl rounded-2xl border border-lohn-dark/15 bg-lohn-light/30 p-6 shadow-sm">
+          <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">DIAGNÓSTICO DE URGÊNCIA</p>
+          <h2 className="mt-4 text-2xl font-semibold tracking-tight text-lohn-ink">
             Descubra o nível de urgência do seu caso em 30 segundos.
           </h2>
-          <p className="mt-2 text-sm text-lohn-light/70">
-            Responda 4 perguntas rápidas e receba uma orientação.
-          </p>
+          <p className="mt-2 text-sm text-lohn-ink/70">Responda 4 perguntas rápidas e receba uma orientação.</p>
 
-          <div className="mt-6 h-2 overflow-hidden rounded-full bg-lohn-light/10">
-            <div
-              className="h-full bg-lohn-accent transition-all"
-              style={{ width: `${progressPct}%` }}
-            />
+          <div className="mt-6 h-2 overflow-hidden rounded-full bg-lohn-dark/10">
+            <div className="h-full bg-lohn-accent transition-all" style={{ width: `${progressPct}%` }} />
           </div>
 
           <div className="mt-8">
             {!done ? (
               <div>
-                <h3 className="text-xl font-semibold text-lohn-light">{questions[step].title}</h3>
-                <div className="mt-5 space-y-3">
+                <div className="text-xs font-medium tracking-[0.18em] text-lohn-accent">
+                  PERGUNTA {step + 1} DE {total}
+                </div>
+                <h3 className="mt-2 text-lg font-semibold text-lohn-ink">{questions[step].title}</h3>
+                <div className="mt-5 grid gap-2">
                   {questions[step].options.map((o) => (
                     <button
                       key={o.label}
                       type="button"
                       onClick={() => choose(o.points)}
-                      className="w-full rounded-md border border-lohn-light/10 bg-transparent px-4 py-3 text-left text-sm text-lohn-light/90 transition hover:border-lohn-accent/70 hover:bg-lohn-light/5"
+                      className="rounded-xl border border-lohn-dark/15 bg-lohn-light/40 px-4 py-3 text-left text-sm text-lohn-ink hover:bg-lohn-dark/5"
                     >
                       {o.label}
                     </button>
@@ -404,17 +404,13 @@ export default function Criminal() {
               <div className="text-center">
                 <div
                   className={`text-xs font-semibold tracking-[0.22em] uppercase ${
-                    result.tag === "alta"
-                      ? "text-red-300"
-                      : result.tag === "media"
-                        ? "text-lohn-accent"
-                        : "text-lohn-accent"
+                    result.tag === "alta" ? "text-red-700" : "text-lohn-accent"
                   }`}
                 >
                   {result.label}
                 </div>
-                <h3 className="mt-3 text-2xl font-semibold text-lohn-light">{result.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-lohn-light/80">{result.text}</p>
+                <h3 className="mt-3 text-2xl font-semibold text-lohn-ink">{result.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-lohn-ink/75">{result.text}</p>
 
                 <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
                   <a
@@ -425,7 +421,6 @@ export default function Criminal() {
                     <Button
                       trackingId="criminal_cta_whatsapp_resultado"
                       trackingLabel={`Criminal - WhatsApp (Resultado ${result.tag})`}
-                      className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
                     >
                       Falar com um advogado agora
                     </Button>
@@ -434,7 +429,6 @@ export default function Criminal() {
                     variant="outline"
                     trackingId="criminal_cta_reiniciar_diagnostico"
                     trackingLabel="Criminal - Reiniciar diagnóstico"
-                    className="border-lohn-light/30 text-lohn-light hover:bg-lohn-light/10"
                     onClick={restart}
                   >
                     Refazer diagnóstico
@@ -450,7 +444,6 @@ export default function Criminal() {
             <Button
               trackingId="criminal_cta_whatsapp_pos_diagnostico"
               trackingLabel="Criminal - WhatsApp (Após diagnóstico)"
-              className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
             >
               Falar agora no WhatsApp
             </Button>
@@ -459,34 +452,36 @@ export default function Criminal() {
       </section>
 
       {/* Como atuamos */}
-      <section className="border-y border-lohn-light/10 bg-black/20">
+      <section className="border-y border-lohn-dark/15 bg-lohn-light/40">
         <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-          <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">/ COMO ATUAMOS</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+          <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">/ COMO ATUAMOS</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-ink">
             Experiência que se traduz em defesa de verdade.
           </h2>
 
-          <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-lohn-light/10 bg-lohn-light/10 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { ic: "⚖", t: "Atuação completa", d: "Investigação, instrução, recursos e habeas corpus." },
               { ic: "◷", t: "Urgência 24h", d: "Resposta imediata em flagrante e custódia." },
               { ic: "⊘", t: "Sigilo absoluto", d: "Total confidencialidade e discrição." },
               { ic: "⊙", t: "Presença onde precisa", d: "Diligências em delegacia e penitenciária." },
             ].map((c) => (
-              <div key={c.t} className="bg-[#0a0a0a] p-8 text-center">
-                <div className="text-2xl text-lohn-accent">{c.ic}</div>
-                <div className="mt-3 text-lg font-semibold text-lohn-light">{c.t}</div>
-                <p className="mt-2 text-sm text-lohn-light/70">{c.d}</p>
+              <div
+                key={c.t}
+                className="rounded-xl border border-lohn-dark/15 bg-lohn-light/30 p-6 text-center shadow-sm"
+              >
+                <div className="text-2xl">{c.ic}</div>
+                <div className="mt-3 text-lg font-semibold text-lohn-ink">{c.t}</div>
+                <p className="mt-2 text-sm text-lohn-ink/75">{c.d}</p>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-10 text-center">
             <a href={whatsAppHref()} target="_blank" rel="noreferrer">
               <Button
                 trackingId="criminal_cta_whatsapp_atuamos"
                 trackingLabel="Criminal - WhatsApp (Como atuamos)"
-                className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
               >
                 Falar agora no WhatsApp
               </Button>
@@ -497,12 +492,12 @@ export default function Criminal() {
 
       {/* FAQ */}
       <section className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20">
-        <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">/ DÚVIDAS FREQUENTES</p>
-        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+        <p className="text-xs font-medium tracking-[0.22em] text-lohn-accent">/ DÚVIDAS FREQUENTES</p>
+        <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-ink">
           Perguntas frequentes.
         </h2>
 
-        <div className="mt-8 rounded-2xl border border-lohn-light/10 bg-[#0a0a0a] px-6">
+        <div className="mt-8 rounded-2xl border border-lohn-dark/15 bg-lohn-light/30 px-6 shadow-sm">
           {[
             {
               q: "Fui preso em flagrante. O que faço nas primeiras horas?",
@@ -545,11 +540,7 @@ export default function Criminal() {
 
         <div className="mt-10 text-center">
           <a href={whatsAppHref()} target="_blank" rel="noreferrer">
-            <Button
-              trackingId="criminal_cta_whatsapp_faq"
-              trackingLabel="Criminal - WhatsApp (FAQ)"
-              className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
-            >
+            <Button trackingId="criminal_cta_whatsapp_faq" trackingLabel="Criminal - WhatsApp (FAQ)">
               Falar agora no WhatsApp
             </Button>
           </a>
@@ -557,31 +548,29 @@ export default function Criminal() {
       </section>
 
       {/* Próximo passo */}
-      <section className="border-t border-lohn-light/10 bg-black/20">
-        <div className="mx-auto w-full max-w-6xl px-4 py-16 md:py-20 text-center">
-          <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/70">/ PRÓXIMO PASSO</p>
-          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light">
+      <section className="bg-lohn-dark">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16 text-center">
+          <p className="text-xs font-medium tracking-[0.22em] text-lohn-light/80">/ PRÓXIMO PASSO</p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-lohn-light sm:text-4xl">
             Não enfrente isso sozinho.
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-lohn-light/75">
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-lohn-light/80">
             Quanto antes você agir, mais opções de defesa você tem.
           </p>
 
           <div className="mt-7">
             <a href={whatsAppHref()} target="_blank" rel="noreferrer">
               <Button
+                variant="light"
                 trackingId="criminal_cta_whatsapp_final"
                 trackingLabel="Criminal - WhatsApp (Final)"
-                className="bg-[#25d366] text-white hover:bg-[#25d366]/90 focus-visible:ring-[#25d366]/40"
               >
                 Falar agora no WhatsApp
               </Button>
             </a>
           </div>
 
-          <p className="mt-5 text-sm text-lohn-light/70">
-            Atendimento sigiloso e sem compromisso. Resposta imediata.
-          </p>
+          <p className="mt-4 text-sm text-lohn-light/70">🔒 Atendimento sigiloso e sem compromisso.</p>
         </div>
       </section>
 

@@ -1,16 +1,17 @@
-Options -MultiViews
-
 <IfModule mod_rewrite.c>
+  # Ensure Apache serves the SPA entrypoint
+  DirectoryIndex index.html
+
   RewriteEngine On
+
+  # If you deploy this site in a subfolder, change RewriteBase accordingly.
   RewriteBase /
 
-  RewriteRule ^index\.html$ - [L]
-
+  # Let existing files and folders be served directly
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
 
+  # SPA fallback (React Router)
   RewriteRule ^ index.html [L]
 </IfModule>
-
-AddType application/manifest+json .webmanifest
