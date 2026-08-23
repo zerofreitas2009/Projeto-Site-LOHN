@@ -1,4 +1,5 @@
 import { supabase } from "../integrations/supabase/client";
+import { hasAnalyticsConsent } from "./siteLohnConsent";
 
 export type SiteLohnEventType = "page_view" | "button_click" | "page_duration";
 
@@ -45,6 +46,10 @@ function detectPlatform() {
 }
 
 export async function logSiteLohnEvent(input: EventInsert) {
+  // O tagueamento (page_view / clicks / duração) é tratado como analytics.
+  // Só registramos após consentimento do usuário.
+  if (!hasAnalyticsConsent()) return;
+
   try {
     const session_id = getSessionId();
     const payload = {

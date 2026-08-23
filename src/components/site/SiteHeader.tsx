@@ -14,6 +14,7 @@ type NavItem =
 
 const navItems: NavItem[] = [
   { label: "Início", kind: "route", to: "/" },
+  { label: "Divórcio", kind: "route", to: "/divorcio" },
   { label: "Sobre", kind: "hash", hash: "#sobre" },
   { label: "Serviços", kind: "hash", hash: "#servicos" },
   { label: "Avaliações", kind: "action", action: "open_review_modal" },

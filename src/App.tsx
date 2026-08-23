@@ -4,6 +4,9 @@ import Index from "./pages/Index";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import Divorcio from "./pages/Divorcio";
+import Privacy from "./pages/Privacy";
+import CookieConsentBanner from "./components/site/CookieConsentBanner";
 import { logSiteLohnEvent } from "./lib/siteLohnTagging";
 
 function isExcludedPath(path: string) {
@@ -97,13 +100,22 @@ function AnalyticsListener() {
   return null;
 }
 
+function GlobalOverlays() {
+  const location = useLocation();
+  if (location.pathname.startsWith("/admin")) return null;
+  return <CookieConsentBanner />;
+}
+
 export default function App() {
   return (
     <>
       <AnalyticsListener />
+      <GlobalOverlays />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/contato" element={<Contact />} />
+        <Route path="/divorcio/*" element={<Divorcio />} />
+        <Route path="/politica-de-privacidade/*" element={<Privacy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
       </Routes>
