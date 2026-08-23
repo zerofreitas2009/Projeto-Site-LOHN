@@ -1,4 +1,7 @@
 <IfModule mod_rewrite.c>
+  # Ensure Apache serves the SPA entrypoint
+  DirectoryIndex index.html
+
   RewriteEngine On
 
   # If you deploy this site in a subfolder, change RewriteBase accordingly.
