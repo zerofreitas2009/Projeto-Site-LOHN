@@ -15,6 +15,7 @@ type NavItem =
 const navItems: NavItem[] = [
   { label: "Início", kind: "route", to: "/" },
   { label: "Divórcio", kind: "route", to: "/divorcio" },
+  { label: "Criminal", kind: "route", to: "/criminal" },
   { label: "Sobre", kind: "hash", hash: "#sobre" },
   { label: "Serviços", kind: "hash", hash: "#servicos" },
   { label: "Avaliações", kind: "action", action: "open_review_modal" },
@@ -198,9 +199,10 @@ export default function SiteHeader() {
               })}
               <a href={whatsappHref} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
                 <Button
-                  className="w-full"
+                  variant="outline"
                   trackingId="whatsapp_header_mobile"
                   trackingLabel="WhatsApp (Header Mobile)"
+                  className="w-full"
                 >
                   WhatsApp
                 </Button>

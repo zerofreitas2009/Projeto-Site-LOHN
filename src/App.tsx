@@ -5,6 +5,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
 import Divorcio from "./pages/Divorcio";
+import Criminal from "./pages/Criminal";
 import Privacy from "./pages/Privacy";
 import CookieConsentBanner from "./components/site/CookieConsentBanner";
 import { logSiteLohnEvent } from "./lib/siteLohnTagging";
@@ -115,6 +116,7 @@ export default function App() {
         <Route path="/" element={<Index />} />
         <Route path="/contato" element={<Contact />} />
         <Route path="/divorcio/*" element={<Divorcio />} />
+        <Route path="/criminal/*" element={<Criminal />} />
         <Route path="/politica-de-privacidade/*" element={<Privacy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={<Admin />} />
